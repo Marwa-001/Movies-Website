@@ -4,15 +4,16 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 
 export default function CollectionHero({ collections }) {
-  const [current, setCurrent] = useState(0);
+  const [current, setCurrent] = useState(1); // default: 2nd image focused
 
-  // Auto-slide every 6 seconds
+  // Auto-cycle the "popped out" focus every 4 seconds
   useEffect(() => {
+    if (!collections || collections.length < 2) return;
     const timer = setInterval(() => {
       setCurrent((prev) => (prev + 1) % collections.length);
-    }, 6000);
+    }, 4000);
     return () => clearInterval(timer);
-  }, [collections.length]);
+  }, [collections?.length]);
 
   // Safety checks
   if (!collections || collections.length === 0) {
@@ -24,9 +25,6 @@ export default function CollectionHero({ collections }) {
   if (!item || !item.imageSrc) {
     return <div className="h-[500px] w-full bg-[#05070a] animate-pulse rounded-[32px] mb-12" />;
   }
-
-  // Helper to get indices for the stacking cards
-  const getIndex = (offset) => (current + offset + collections.length) % collections.length;
 
   return (
     <section className="relative w-full h-[600px] rounded-[32px] overflow-hidden mb-12 flex flex-col justify-center px-12 lg:px-24">
@@ -48,7 +46,7 @@ export default function CollectionHero({ collections }) {
       {/* Content Area - Styled like Hero */}
       <div className="relative z-10 w-full max-w-xl">
         <h1 className="text-white text-5xl md:text-6xl font-bold tracking-tight mb-4 drop-shadow-2xl">
-          {item.title} Saga
+          {item.title} Collection
         </h1>
 
         <p className="text-gray-300 text-lg mb-8 opacity-90 line-clamp-3 leading-relaxed">
@@ -94,39 +92,25 @@ export default function CollectionHero({ collections }) {
         </div>
       </div>
 
-      {/* Stacking Cards Carousel Control (Bottom Right) */}
-      <div className="absolute bottom-10 right-12 z-20 flex items-end">
-        
-        {/* Card 1 (Previous) */}
-        <div 
-          onClick={() => setCurrent(getIndex(-1))}
-          className="w-[100px] h-[100px] rounded-[20px] overflow-hidden border border-white/10 transition-all hover:scale-105 cursor-pointer relative z-10 opacity-40 hover:opacity-80"
-        >
-          <Image src={collections[getIndex(-1)].imageSrc} fill className="object-cover" alt="" />
-          <div className="absolute inset-0 bg-black/40" />
-        </div>
-
-        {/* Card 2 (Focused / Current) */}
-        <div className="w-[150px] h-[150px] rounded-[20px] overflow-hidden border-2 border-[#228EE5] shadow-[0_0_40px_rgba(34,142,229,0.5)] relative z-40 -ml-8 scale-105 transition-all">
-          <Image src={collections[getIndex(0)].imageSrc} fill className="object-cover" alt="" />
-        </div>
-
-        {/* Card 3 (Next) */}
-        <div 
-          onClick={() => setCurrent(getIndex(1))}
-          className="w-[100px] h-[100px] rounded-[20px] overflow-hidden border border-white/10 relative z-30 -ml-8 transition-all hover:scale-105 cursor-pointer opacity-80"
-        >
-          <Image src={collections[getIndex(1)].imageSrc} fill className="object-cover" alt="" />
-          <div className="absolute inset-0 bg-black/20" />
-        </div>
-
-        {/* Card 4 (Hidden Next) */}
-        <div 
-          onClick={() => setCurrent(getIndex(2))}
-          className="w-[100px] h-[100px] rounded-[20px] overflow-hidden border border-white/10 relative z-20 -ml-8 opacity-40 transition-all hover:opacity-100 hover:scale-105 cursor-pointer hidden md:block"
-        >
-          <Image src={collections[getIndex(2)].imageSrc} fill className="object-cover" alt="" />
-        </div>
+      {/* Carousel: 4 fixed thumbnails, the active one "pops out" with a glow */}
+      <div className="absolute bottom-10 right-12 z-20 flex items-end gap-3">
+        {collections.slice(0, 4).map((c, idx) => {
+          const isActive = idx === current;
+          return (
+            <div
+              key={c.title ?? idx}
+              onClick={() => setCurrent(idx)}
+              className={`relative overflow-hidden rounded-[20px] cursor-pointer transition-all duration-500 ease-out ${
+                isActive
+                  ? "w-[150px] h-[150px] border-2 border-[#228EE5] shadow-[0_0_40px_rgba(34,142,229,0.5)] z-10 scale-105"
+                  : "w-[100px] h-[100px] border border-white/10 opacity-50 hover:opacity-90"
+              }`}
+            >
+              <Image src={c.imageSrc} fill className="object-cover" alt="" />
+              {!isActive && <div className="absolute inset-0 bg-black/30" />}
+            </div>
+          );
+        })}
       </div>
 
     </section>

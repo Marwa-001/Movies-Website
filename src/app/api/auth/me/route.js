@@ -19,14 +19,22 @@ export async function GET() {
     }
 
     await connectDB();
-    const user = await User.findById(payload.sub).select("name username email");
+    const user = await User.findById(payload.sub).select("name username email avatarColor");
 
     if (!user) {
       return NextResponse.json({ user: null }, { status: 200 });
     }
 
     return NextResponse.json(
-      { user: { id: user._id, name: user.name, username: user.username, email: user.email } },
+      {
+        user: {
+          id: user._id,
+          name: user.name,
+          username: user.username,
+          email: user.email,
+          avatarColor: user.avatarColor,
+        },
+      },
       { status: 200 }
     );
   } catch (err) {

@@ -117,12 +117,12 @@ export default function Collections() {
             ))
         }
         
-        {/* See All Trigger */}
+        {/* See More Trigger */}
         <Link 
           href="/collections" 
           className="flex items-center justify-center min-w-[120px] text-gray-500 hover:text-[#228EE5] font-bold transition-colors group shrink-0"
         >
-          See All <span className="ml-2 group-hover:translate-x-1 transition-transform">→</span>
+          See More <span className="ml-2 group-hover:translate-x-1 transition-transform">→</span>
         </Link>
       </div>
     </section>

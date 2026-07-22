@@ -39,6 +39,9 @@ function mapMovieToCard(movie, genreNameById) {
     id: String(movie.id),
     title: movie.title,
     imageSrc: getTmdbImageUrl(movie.poster_path),
+    backdropSrc: getTmdbImageUrl(movie.backdrop_path, "original"),
+    overview: movie.overview || "",
+    voteAverage: movie.vote_average || 0,
     genres: (movie.genre_ids || []).map((id) => genreNameById[id]).filter(Boolean),
   };
 }
@@ -178,5 +181,40 @@ export async function getThematicCollection(type, mediaType = "movie") {
     title: type,
     // Representative image from the top result
     imageSrc: getTmdbImageUrl(data.results[0]?.poster_path, "w500"),
+  };
+}
+
+const THEMATIC_CONFIG = {
+  musicals: { with_genres: "10402" },
+  marvel: { with_companies: "420" },
+  dc: { with_companies: "12892" },
+  johnwick: { with_keywords: "236409" },
+  godzilla: { with_keywords: "156485" },
+  starwars: { with_keywords: "161181" },
+  horror: { with_genres: "27" },
+  action: { with_genres: "28" },
+};
+
+/**
+ * Full detail payload for a single collection page: hero backdrop + the
+ * list of movies/series belonging to that theme, mapped to the same card
+ * shape MovieCard already expects.
+ */
+export async function getThematicCollectionDetails(type, mediaType = "movie") {
+  const cleanKey = type.toLowerCase().replace(/\s+/g, "");
+  const queryParams = THEMATIC_CONFIG[cleanKey] || {};
+  const isTv = mediaType === "series" || mediaType === "tv";
+  const endpoint = isTv ? "/discover/tv" : "/discover/movie";
+
+  const data = await tmdbFetch(endpoint, { page: 1, sort_by: "popularity.desc", ...queryParams });
+  const idMap = isTv ? TV_ID_TO_NAME : MOVIE_ID_TO_NAME;
+  const mapper = isTv ? mapTvToCard : mapMovieToCard;
+  const results = data.results || [];
+
+  return {
+    title: type,
+    imageSrc: getTmdbImageUrl(results[0]?.poster_path, "w500"),
+    backdropSrc: getTmdbImageUrl(results[0]?.backdrop_path, "original"),
+    items: results.slice(0, 10).map((r) => mapper(r, idMap)),
   };
 }

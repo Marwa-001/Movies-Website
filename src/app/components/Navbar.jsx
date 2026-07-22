@@ -1,10 +1,11 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Bell } from 'lucide-react';
 import { useThemeStore } from '@/store/useThemeStore';
 import { useAuthStore } from '@/store/useAuthStore';
 import { useLogout } from '@/hooks/useAuth';
+import { usePathname } from 'next/navigation';
 
 const Navbar = () => {
     const [activeTab, setActiveTab] = useState('Home');
@@ -12,41 +13,67 @@ const Navbar = () => {
     const toggleTheme = useThemeStore((s) => s.toggleTheme);
     const { user, isAuthenticated } = useAuthStore();
     const logout = useLogout();
+    const pathname=usePathname()
+
+    useEffect(() => {
+    const hash = window.location.hash;
+    if (hash) {
+        const link = navLinks.find(l => l.href.includes(hash));
+        if (link) setActiveTab(link.name);
+    } else if (pathname === '/') {
+        setActiveTab('Home');
+    }
+}, [pathname]);
 
     const navLinks = [
         { name: 'Home', href: '/' },
-        { name: 'Pricing', href: '/pricing' },
+        { name: 'Pricing', href: '#pricing' },
         { name: 'Movies', href: '/movies' },
         { name: 'Series', href: '/series' },
         { name: 'Collection', href: '/collection' },
-        { name: 'FAQ', href: '/faq' },
+        { name: 'FAQ', href: '#faqs' },
     ];
 
     return (
         <nav className="navbar-container fixed top-6 left-1/2 -translate-x-1/2 w-[95%] max-w-6xl z-50">
-  <div
-    className="relative flex items-center justify-between px-8 py-3 rounded-[16px] overflow-hidden shadow-2xl"
-    style={{
-      // Exact background from Figma: #1A1919 at 30%
-      backgroundColor: 'rgba(26, 25, 25, 0.3)', 
-      backdropFilter: 'blur(8px)', // Exact blur from Figma
-      WebkitBackdropFilter: 'blur(8px)',
-    }}
-  >
-    {/* 
-      This pseudo-border ensures the blue stays ONLY on the edges.
-      It uses the exact 0.5px width and gradient stops from your screenshot.
+  <div className="relative rounded-[16px] shadow-2xl">
+    {/*
+      Decorative background layer only — this is where the blur, fill color,
+      and pseudo-border live. It's the one that needs overflow-hidden (to
+      keep the border-gradient mask contained to the rounded corners), and
+      it has no interactive content, so nothing here can get clipped.
     */}
-    <div 
-      className="absolute inset-0 rounded-[16px] pointer-events-none"
+    <div
+      className="absolute inset-0 rounded-[16px] overflow-hidden pointer-events-none"
       style={{
-        padding: '0.5px', // Exact border width
-        background: 'linear-gradient(to right, #228EE5, rgba(34, 142, 229, 0.18), rgba(34, 142, 229, 0.14), #228EE5)',
-        WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
-        WebkitMaskComposite: 'destination-out',
-        maskComposite: 'exclude',
+        // Exact background from Figma: #1A1919 at 30%
+        backgroundColor: 'rgba(26, 25, 25, 0.3)',
+        backdropFilter: 'blur(8px)', // Exact blur from Figma
+        WebkitBackdropFilter: 'blur(8px)',
       }}
-    />
+    >
+      {/*
+        This pseudo-border ensures the blue stays ONLY on the edges.
+        It uses the exact 0.5px width and gradient stops from your screenshot.
+      */}
+      <div
+        className="absolute inset-0 rounded-[16px]"
+        style={{
+          padding: '0.5px', // Exact border width
+          background: 'linear-gradient(to right, #228EE5, rgba(34, 142, 229, 0.18), rgba(34, 142, 229, 0.14), #228EE5)',
+          WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+          WebkitMaskComposite: 'destination-out',
+          maskComposite: 'exclude',
+        }}
+      />
+    </div>
+
+    {/*
+      Content layer — deliberately has NO overflow-hidden, so things like the
+      Login/Logout capsule that pop out below the profile icon aren't clipped
+      and stay clickable.
+    */}
+    <div className="relative flex items-center justify-between px-8 py-3">
 
                 {/* Left Side: Logo */}
                 <div className="flex items-center gap-2 cursor-pointer">
@@ -101,25 +128,52 @@ const Navbar = () => {
                     </div>
 
                     {isAuthenticated ? (
-                        <button
-                            className="group flex items-center justify-center"
-                            onClick={() => logout.mutate()}
-                            title={user?.name ? `Log out (${user.name})` : "Log out"}
-                        >
-                            <img
-                                src="/assets/user.png"
-                                className="w-5 h-5 object-contain opacity-70 group-hover:opacity-100 brightness-0 invert transition-all"
-                                alt="User"
-                            />
-                        </button>
+                        <div className="relative group/profile">
+                            <button
+                                className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-full border border-white/15 transition-transform group-hover/profile:scale-105"
+                                title={user?.username || user?.name || "Account"}
+                            >
+                                {user?.avatarColor ? (
+                                    <div className={`h-full w-full ${user.avatarColor}`} />
+                                ) : (
+                                    <img
+                                        src="/assets/user.png"
+                                        className="w-4 h-4 object-contain opacity-90 brightness-0 invert"
+                                        alt="User"
+                                    />
+                                )}
+                            </button>
+
+                            {/* Logout capsule — appears below the avatar on hover */}
+                            <div className="absolute right-0 top-full pt-3 opacity-0 translate-y-1 pointer-events-none transition-all duration-200 group-hover/profile:opacity-100 group-hover/profile:translate-y-0 group-hover/profile:pointer-events-auto">
+                                <button
+                                    onClick={() => logout.mutate()}
+                                    className="whitespace-nowrap rounded-full bg-[#E5228E] px-4 py-1.5 text-xs font-semibold text-white shadow-lg transition-colors hover:bg-[#c91d7c]"
+                                >
+                                    Logout
+                                </button>
+                            </div>
+                        </div>
                     ) : (
-                        <Link href="/login" className="group flex items-center justify-center">
-                            <img
-                                src="/assets/user.png"
-                                className="w-5 h-5 object-contain opacity-70 group-hover:opacity-100 brightness-0 invert transition-all"
-                                alt="User"
-                            />
-                        </Link>
+                        <div className="relative">
+                            <button className="group flex h-8 w-8 items-center justify-center" aria-label="Account">
+                                <img
+                                    src="/assets/user.png"
+                                    className="w-5 h-5 object-contain opacity-70 group-hover:opacity-100 brightness-0 invert transition-all"
+                                    alt="User"
+                                />
+                            </button>
+
+                            {/* Login capsule — always visible below the profile icon */}
+                            <div className="absolute right-0 top-full pt-3">
+                                <Link
+                                    href="/login"
+                                    className="whitespace-nowrap rounded-full bg-[#E5228E] px-4 py-1.5 text-xs font-semibold text-white shadow-lg transition-colors hover:bg-[#c91d7c]"
+                                >
+                                    Login
+                                </Link>
+                            </div>
+                        </div>
                     )}
 
                     <button
@@ -135,6 +189,7 @@ const Navbar = () => {
                         />
                     </button>
                 </div>
+            </div>
             </div>
         </nav>
     );

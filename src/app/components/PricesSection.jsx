@@ -106,7 +106,7 @@ export default function PricingSection() {
   ];
 
   return (
-    <section className="min-h-screen bg-[#050514] flex flex-wrap items-center justify-center gap-10 py-24 px-10">
+    <section id="pricing" className="min-h-screen bg-[#050514] flex flex-wrap items-center justify-center gap-10 py-24 px-10">
       {plans.map((plan, idx) => (
         <PricingCard key={idx} plan={plan} />
       ))}

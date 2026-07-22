@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, User, ImagePlus } from "lucide-react";
 import { signupSchema, flattenZodErrors } from "@/lib/zod-schemas";
-import { useSignup } from "@/hooks/useAuth";
+import { useSignup, useUpdateProfile } from "@/hooks/useAuth";
 
 const AVATAR_OPTIONS = [
   { id: "a1", bg: "bg-gradient-to-br from-rose-500 to-red-700" },
@@ -26,6 +26,7 @@ const inputClass =
 export default function SignupPage() {
   const router = useRouter();
   const signup = useSignup();
+  const updateProfile = useUpdateProfile();
 
   const [step, setStep] = useState("form"); // "form" | "avatar" | "success"
   const [form, setForm] = useState({
@@ -57,7 +58,17 @@ export default function SignupPage() {
     });
   };
 
-  const handleConfirmAvatar = () => setStep("success");
+  const handleConfirmAvatar = () => {
+    const chosen = AVATAR_OPTIONS.find((a) => a.id === selectedAvatar);
+    if (chosen) {
+      updateProfile.mutate(
+        { avatarColor: chosen.bg },
+        { onSettled: () => setStep("success") }
+      );
+    } else {
+      setStep("success");
+    }
+  };
 
   return (
     <main 

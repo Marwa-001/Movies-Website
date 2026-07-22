@@ -71,6 +71,36 @@ export function useSignup() {
   });
 }
 
+async function patchJson(url, body) {
+  const res = await fetch(url, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify(body),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    const err = new Error(data.message || "Request failed");
+    err.status = res.status;
+    throw err;
+  }
+  return data;
+}
+
+/** Persists the avatar color chosen on the signup "choose your profile" step. */
+export function useUpdateProfile() {
+  const queryClient = useQueryClient();
+  const setUser = useAuthStore((s) => s.setUser);
+
+  return useMutation({
+    mutationFn: (payload) => patchJson("/api/auth/profile", payload),
+    onSuccess: (data) => {
+      setUser(data.user);
+      queryClient.invalidateQueries({ queryKey: ["auth", "me"] });
+    },
+  });
+}
+
 export function useLogout() {
   const queryClient = useQueryClient();
   const clearUser = useAuthStore((s) => s.clearUser);

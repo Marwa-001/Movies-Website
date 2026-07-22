@@ -9,6 +9,8 @@ import GoldenGlobeBanner from "./components/GoldenGlobeBanner";
 import Series from "./components/Series";
 import PricingSection from "./components/PricesSection";
 import Collections from "./components/Collections";
+import Footer from "./components/Footer";
+import FAQs from "./components/Faq";
 
 // Genre labels shown in the GenreFilter pills. These map to TMDB genre ids
 // in services/tmdb.js (MOVIE_GENRE_IDS / TV_GENRE_IDS).
@@ -33,6 +35,8 @@ export default function Home() {
       <Series onAdd={handleAdd} onSeeMore={() => router.push("/series")} genres={genreList} />
       <PricingSection />
       <Collections />
+      <FAQs />
+      <Footer />
     </>
   );
 }

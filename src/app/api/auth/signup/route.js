@@ -4,7 +4,7 @@ import { connectDB } from "@/lib/mongodb";
 import User from "@/models/User";
 import { signupSchema, flattenZodErrors } from "@/lib/zod-schemas";
 import { signToken, AUTH_COOKIE_NAME, authCookieOptions } from "@/lib/jwt";
-console.log("CHECKING ENV:", process.env.MONGODB_URI ? "FOUND" : "NOT FOUND");
+
 export async function POST(request) {
   try {
     const body = await request.json();
@@ -41,7 +41,15 @@ export async function POST(request) {
     const token = signToken({ sub: user._id.toString(), email: user.email });
 
     const response = NextResponse.json(
-      { user: { id: user._id, name: user.name, username: user.username, email: user.email } },
+      {
+        user: {
+          id: user._id,
+          name: user.name,
+          username: user.username,
+          email: user.email,
+          avatarColor: user.avatarColor,
+        },
+      },
       { status: 201 }
     );
     response.cookies.set(AUTH_COOKIE_NAME, token, authCookieOptions);

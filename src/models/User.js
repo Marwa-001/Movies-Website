@@ -17,6 +17,10 @@ const UserSchema = new mongoose.Schema(
       trim: true,
     },
     passwordHash: { type: String, required: true },
+    // Tailwind gradient class chosen on the signup avatar-picker step, e.g.
+    // "bg-gradient-to-br from-rose-500 to-red-700". Shown in the Navbar in
+    // place of the default profile icon once the user is logged in.
+    avatarColor: { type: String, default: null },
   },
   { timestamps: true }
 );
