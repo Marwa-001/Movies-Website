@@ -1,0 +1,109 @@
+"use client";
+
+import Image from "next/image";
+import Link from "next/link";
+import { Plus } from "lucide-react";
+import { useId } from "react";
+
+export default function MovieCard({ id, title, imageSrc, onAdd, priority = false, href }) {
+  const Wrapper = href ? Link : "div";
+  const wrapperProps = href ? { href } : {};
+  const maskId = useId().replace(/:/g, "");
+
+  // Dimensions & Radii constants
+  const cardW = 208;
+  const cardH = 296;
+  const btnS = 56;
+  const gap = 8;
+  const cutout = btnS + gap; // 64px
+  const outerR = 16; // Card radius
+  const btnR = 12;   // Button radius
+  const innerR = 12; // Gap/Moat curve radius
+
+  return (
+    <Wrapper
+      {...wrapperProps}
+      className="group relative w-[208px] h-[296px] flex-shrink-0 bg-[#020617] rounded-[16px] cursor-pointer block"
+    >
+      <svg width="0" height="0" className="absolute" viewBox={`0 0 ${cardW} ${cardH}`}>
+        <defs>
+          <clipPath id={maskId} clipPathUnits="userSpaceOnUse">
+            {/* 1. THE ISLAND (Behind the button) 
+                Top-left matches card (16px), others match button (12px) */}
+            <path d={`
+              M ${outerR},0 
+              H ${btnS - btnR} 
+              A ${btnR} ${btnR} 0 0 1 ${btnS} ${btnR} 
+              V ${btnS - btnR} 
+              A ${btnR} ${btnR} 0 0 1 ${btnS - btnR} ${btnS} 
+              H ${btnR} 
+              A ${btnR} ${btnR} 0 0 1 0 ${btnS - btnR} 
+              V ${outerR} 
+              A ${outerR} ${outerR} 0 0 1 ${outerR} 0 
+              Z
+            `} />
+            
+            {/* 2. MAIN POSTER BODY 
+                Added radii to the 'sharp' transition points at (cutout, 0) and (0, cutout) */}
+            <path d={`
+              M ${cutout + innerR}, 0 
+              H ${cardW - outerR} 
+              A ${outerR} ${outerR} 0 0 1 ${cardW} ${outerR} 
+              V ${cardH - outerR} 
+              A ${outerR} ${outerR} 0 0 1 ${cardW - outerR} ${cardH} 
+              H ${outerR} 
+              A ${outerR} ${outerR} 0 0 1 0 ${cardH - outerR} 
+              V ${cutout + innerR} 
+              A ${innerR} ${innerR} 0 0 1 ${innerR} ${cutout} 
+              H ${cutout - innerR} 
+              A ${innerR} ${innerR} 0 0 0 ${cutout} ${cutout - innerR} 
+              V ${innerR} 
+              A ${innerR} ${innerR} 0 0 1 ${cutout + innerR} 0 
+              Z
+            `} />
+          </clipPath>
+        </defs>
+      </svg>
+
+      {/* Image Container */}
+      <div 
+        className="absolute inset-0 w-full h-full overflow-hidden"
+        style={{ clipPath: `url(#${maskId})` }}
+      >
+        <Image
+          src={imageSrc}
+          alt={title}
+          fill
+          priority={priority}
+          sizes="208px"
+          className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+        />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+      </div>
+      
+      {/* Plus Button */}
+      <button
+        type="button"
+        aria-label={`Add ${title} to my list`}
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          onAdd?.(id);
+        }}
+        className="absolute left-0 top-0 z-30 flex h-[56px] w-[56px] items-center justify-center 
+                   rounded-[12px] border border-white/10
+                   bg-gradient-to-b from-black/52 to-black/22 
+                   backdrop-blur-[5px] 
+                   transition-all duration-300 hover:scale-105 active:scale-95"
+      >
+        <Plus className="h-8 w-8 text-white" strokeWidth={2.5} />
+      </button>
+
+      <div className="absolute bottom-4 left-0 right-0 text-center px-2 pointer-events-none">
+         <span className="text-[10px] font-bold tracking-[0.3em] text-white/90 uppercase drop-shadow-md">
+           {title}
+         </span>
+      </div>
+    </Wrapper>
+  );
+}

@@ -1,0 +1,73 @@
+@import "tailwindcss";
+
+@theme {
+  --font-lato: var(--font-lato);
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+
+
+@layer base {
+  /* Dark theme (default) matches the original deep navy/black UI exactly. */
+  html.dark body {
+    background-color: #050514;
+    color: white;
+  }
+
+  /* Light theme is additive only — toggled via useThemeStore + Navbar. */
+  html.light body {
+    background-color: #f5f6fa;
+    color: #0a0c10;
+  }
+
+  body {
+    font-family: var(--font-lato);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* WEB HEADLINES (Pixel Perfect from Style Guide) */
+  h1 {
+    font-weight: 700; /* Bold */
+    font-size: 48px; /* 96pt */
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+
+  h2 {
+    font-weight: 700; /* Bold */
+    font-size: 96px;  /* 72pt */
+    line-height: 1.1;
+  }
+
+  h3 {
+    font-weight: 700; /* Bold */
+    font-size: 64px;  /* 48pt */
+    line-height: 1.2;
+  }
+
+  h4 {
+    font-weight: 700; /* Bold */
+    font-size: 32px;  /* 24pt */
+    line-height: 1.2;
+  }
+
+  /* WEB PARAGRAPHS */
+  .p-medium {
+    font-weight: 500;
+    font-size: 16px; /* 16pt */
+    line-height: 1.6;
+  }
+
+  .p-regular {
+    font-weight: 400;
+    font-size: 16px; /* 16pt */
+    line-height: 1.6;
+  }
+}
