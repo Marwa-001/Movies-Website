@@ -20,6 +20,7 @@ export default function Movies({ genres, onAdd, onSeeMore }) {
   if (isLoading) return <PosterRowSkeleton heading="Movies" />;
 
   return (
+    <>
     <PosterRow
       heading="Movies"
       items={items || []}
@@ -27,7 +28,7 @@ export default function Movies({ genres, onAdd, onSeeMore }) {
       onSeeMore={onSeeMore}
       linkBase="/movies"
       filters={<GenreFilter genres={genres} activeGenres={activeGenres} onToggle={toggleGenre} />}
-    />
+    /></>
   );
   // Note: `isError` is intentionally not blocking render — PosterRow just
   // renders an empty row if the TMDB request fails, keeping the layout stable.

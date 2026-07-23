@@ -26,7 +26,7 @@ export default function Series({ genres, onAdd, onSeeMore }) {
   }
 
   return (
-    <div className="bg-[#050514]"> {/* Deep navy/black background matching the screenshot */}
+    <div className="bg-[#050514]" id="series"> {/* Deep navy/black background matching the screenshot */}
       <PosterRow
         heading="Series"
         items={items || []}

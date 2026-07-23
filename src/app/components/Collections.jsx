@@ -76,7 +76,7 @@ export default function Collections() {
   }, [activeTab]);
 
   return (
-    <section className="mt-16 px-4 lg:px-12">
+    <section className="mt-16 px-4 lg:px-12"  id="collections">
       <div className="flex justify-between items-center mb-10">
         <h2 className="text-3xl font-bold text-white tracking-tight">Collection</h2>
 

@@ -28,9 +28,9 @@ const Navbar = () => {
     const navLinks = [
         { name: 'Home', href: '/' },
         { name: 'Pricing', href: '#pricing' },
-        { name: 'Movies', href: '/movies' },
-        { name: 'Series', href: '/series' },
-        { name: 'Collection', href: '/collections' },
+        { name: 'Movies', href: '/#movies' },
+        { name: 'Series', href: '/#series' },
+        { name: 'Collection', href: '/#collections' },
         { name: 'FAQ', href: '#faqs' },
     ];
 
