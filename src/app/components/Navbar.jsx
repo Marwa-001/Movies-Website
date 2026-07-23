@@ -30,7 +30,7 @@ const Navbar = () => {
         { name: 'Pricing', href: '#pricing' },
         { name: 'Movies', href: '/movies' },
         { name: 'Series', href: '/series' },
-        { name: 'Collection', href: '/collection' },
+        { name: 'Collection', href: '/collections' },
         { name: 'FAQ', href: '#faqs' },
     ];
 
@@ -97,7 +97,7 @@ const Navbar = () => {
                             <Link
                                 href={link.href}
                                 onClick={() => setActiveTab(link.name)}
-                                className={`text-[15px] font-medium transition-colors duration-300 ${activeTab === link.name ? 'text-white' : 'text-gray-400 hover:text-white'
+                                className={`text-[15px] font-medium transition-colors duration-300 pb-1 ${activeTab === link.name ? "text-white" : "text-gray-400 hover:text-white"
                                     }`}
                             >
                                 {link.name}
@@ -145,7 +145,7 @@ const Navbar = () => {
                             </button>
 
                             {/* Logout capsule — appears below the avatar on hover */}
-                            <div className="absolute right-0 top-full pt-3 opacity-0 translate-y-1 pointer-events-none transition-all duration-200 group-hover/profile:opacity-100 group-hover/profile:translate-y-0 group-hover/profile:pointer-events-auto">
+                            <div className="absolute right-0 top-3 pt-3 opacity-0 translate-y-1 pointer-events-none transition-all duration-200 group-hover/profile:opacity-100 group-hover/profile:translate-y-0 group-hover/profile:pointer-events-auto">
                                 <button
                                     onClick={() => logout.mutate()}
                                     className="whitespace-nowrap rounded-full bg-[#E5228E] px-4 py-1.5 text-xs font-semibold text-white shadow-lg transition-colors hover:bg-[#c91d7c]"
@@ -165,10 +165,10 @@ const Navbar = () => {
                             </button>
 
                             {/* Login capsule — always visible below the profile icon */}
-                            <div className="absolute right-0 top-full pt-3">
+                            <div className="absolute right-0 top-2 pt-2">
                                 <Link
                                     href="/login"
-                                    className="whitespace-nowrap rounded-full bg-[#E5228E] px-4 py-1.5 text-xs font-semibold text-white shadow-lg transition-colors hover:bg-[#c91d7c]"
+                                    className="whitespace-nowrap rounded-full bg-[#E5228E] px-1 py-0.5 text-[9px] font-semibold text-white shadow-lg transition-colors hover:bg-[#c91d7c]"
                                 >
                                     Login
                                 </Link>

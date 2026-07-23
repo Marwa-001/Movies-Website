@@ -3,7 +3,7 @@
 export const COLLECTION_THEMES = [
   "Marvel",
   "DC",
-  "Star Wars",
+  // "Star Wars",
   "The Nun",
   "Insidious",
   "Musicals",

@@ -137,7 +137,7 @@ export default function MovieDetailPage() {
           <div className="no-scrollbar flex gap-4 overflow-x-auto pb-2">
             {movie.gallery.map((src, i) => (
               <div key={i} className="relative w-40 h-24 flex-shrink-0 rounded-xl overflow-hidden border border-white/10">
-                <Image src={src} alt={`${movie.title} still ${i + 1}`} fill sizes="160px" className="object-cover" />
+                <Image src={src || null} alt={`${movie.title} still ${i + 1}`} fill sizes="160px" className="object-cover" />
               </div>
             ))}
           </div>
@@ -175,7 +175,7 @@ export default function MovieDetailPage() {
               {movie.cast.map((c) => (
                 <div key={c.id} className="w-16 text-center">
                   <div className="relative w-16 h-16 rounded-full overflow-hidden border border-white/10 bg-white/5 mx-auto">
-                    <Image src={c.photoUrl} alt={c.name} fill sizes="64px" className="object-cover" />
+                    <Image src={c.photoUrl || null} alt={c.name} fill sizes="64px" className="object-cover" />
                   </div>
                   <p className="mt-2 text-xs text-gray-400 truncate" title={c.name}>
                     {c.name}
@@ -192,7 +192,7 @@ export default function MovieDetailPage() {
             <h3 className="text-2xl font-bold text-white mb-4">Director</h3>
             <div className="w-16 text-center">
               <div className="relative w-16 h-16 rounded-full overflow-hidden border border-white/10 bg-white/5 mx-auto">
-                <Image src={movie.director.photoUrl} alt={movie.director.name} fill sizes="64px" className="object-cover" />
+                <Image src={movie.director.photoUrl || null} alt={movie.director.name} fill sizes="64px" className="object-cover" />
               </div>
               <p className="mt-2 text-xs text-gray-400 truncate" title={movie.director.name}>
                 {movie.director.name}

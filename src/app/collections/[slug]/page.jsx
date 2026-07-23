@@ -3,26 +3,32 @@ import { findThemeBySlug } from "@/lib/collection-themes";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import MovieCard from "../../components/MovieCard";
+import Image from "next/image"; // Added for better performance
 
 export const dynamic = "force-dynamic";
 
 export default async function SingleCollectionPage({ params }) {
   const { slug } = await params;
   const themeName = findThemeBySlug(slug);
+  // const data = await getThematicCollectionDetails(themeName);
   const data = await getThematicCollectionDetails(themeName);
+console.log("Collection Data:", data); // Check if backdropSrc or backdrop_path exists
 
   return (
     <main className="min-h-screen bg-[#050514] pb-20">
       <Navbar />
-
-      <div className="max-w-7xl mx-auto px-8 pt-32">
-        {/* Hero banner — same visual language as the home Hero, no carousel here */}
-        <section className="relative w-full h-[420px] rounded-[32px] overflow-hidden mb-16 flex flex-col justify-center px-12">
+<section className="relative w-full h-[420px] rounded-[32px] overflow-hidden mb-16 flex flex-col justify-center px-12">
           <div className="absolute inset-0 z-0">
-            <img
-              src={data.backdropSrc}
-              alt=""
-              className="w-full h-full object-cover object-top"
+            {/* 
+               Updated to Next.js Image + Fallback check 
+               to prevent the "empty string" error 
+            */}
+            <Image
+              src={data.backdropSrc || "/assets/hero banner.png"} 
+              alt={data.title || "Collection"}
+              fill
+              className="object-cover object-top"
+              priority
             />
             <div className="absolute inset-0 bg-gradient-to-r from-[#05070a] via-[#05070a]/50 to-transparent" />
             <div className="absolute inset-0 bg-gradient-to-t from-[#05070a] via-transparent to-transparent" />
@@ -63,6 +69,7 @@ export default async function SingleCollectionPage({ params }) {
             </div>
           </div>
         </section>
+      <div className="max-w-7xl mx-auto px-8">
 
         {/* Movies belonging to this collection */}
         <h2 className="text-3xl font-bold text-white tracking-tight mb-10">
@@ -71,7 +78,16 @@ export default async function SingleCollectionPage({ params }) {
 
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-x-6 gap-y-10 justify-items-center mb-10">
           {data.items.map((item, idx) => (
-            <MovieCard key={item.id} {...item} priority={idx < 5} href={`/movies/${item.id}`} onAdd={() => {}} />
+            /* 
+               FIX: Removed onAdd={() => {}} 
+               Functions cannot be passed from Server Components to Client Components.
+            */
+            <MovieCard 
+              key={item.id} 
+              {...item} 
+              priority={idx < 5} 
+              href={`/movies/${item.id}`} 
+            />
           ))}
         </div>
       </div>
