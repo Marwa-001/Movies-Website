@@ -47,7 +47,7 @@ export async function POST(request) {
           name: user.name,
           username: user.username,
           email: user.email,
-          avatarColor: user.avatarColor,
+          avatarUrl: user.avatarUrl,
         },
       },
       { status: 201 }

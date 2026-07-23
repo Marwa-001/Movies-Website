@@ -19,7 +19,7 @@ export async function GET() {
     }
 
     await connectDB();
-    const user = await User.findById(payload.sub).select("name username email avatarColor");
+    const user = await User.findById(payload.sub).select("name username email avatarUrl");
 
     if (!user) {
       return NextResponse.json({ user: null }, { status: 200 });
@@ -32,7 +32,7 @@ export async function GET() {
           name: user.name,
           username: user.username,
           email: user.email,
-          avatarColor: user.avatarColor,
+          avatarUrl: user.avatarUrl,
         },
       },
       { status: 200 }

@@ -9,15 +9,15 @@ import { signupSchema, flattenZodErrors } from "@/lib/zod-schemas";
 import { useSignup, useUpdateProfile } from "@/hooks/useAuth";
 
 const AVATAR_OPTIONS = [
-  { id: "a1", bg: "bg-gradient-to-br from-rose-500 to-red-700" },
-  { id: "a2", bg: "bg-gradient-to-br from-violet-500 to-purple-700" },
-  { id: "a3", bg: "bg-gradient-to-br from-orange-400 to-amber-600" },
-  { id: "a4", bg: "bg-gradient-to-br from-slate-500 to-slate-800" },
-  { id: "a5", bg: "bg-gradient-to-br from-sky-500 to-blue-700" },
-  { id: "a6", bg: "bg-gradient-to-br from-lime-400 to-green-600" },
-  { id: "a7", bg: "bg-gradient-to-br from-pink-400 to-fuchsia-600" },
-  { id: "a8", bg: "bg-gradient-to-br from-yellow-400 to-orange-500" },
-  { id: "a9", bg: "bg-gradient-to-br from-cyan-400 to-teal-600" },
+  { id: "a1", src: "/assets/avatars/1.png" },
+  { id: "a2", src: "/assets/avatars/2.png" },
+  { id: "a3", src: "/assets/avatars/3.png" },
+  { id: "a4", src: "/assets/avatars/4.png" },
+  { id: "a5", src: "/assets/avatars/5.png" },
+  { id: "a6", src: "/assets/avatars/6.png" },
+  { id: "a7", src: "/assets/avatars/7.png" },
+  { id: "a8", src: "/assets/avatars/8.png" },
+  { id: "a9", src: "/assets/avatars/9.png" },
 ];
 
 const inputClass =
@@ -62,13 +62,16 @@ export default function SignupPage() {
     const chosen = AVATAR_OPTIONS.find((a) => a.id === selectedAvatar);
     if (chosen) {
       updateProfile.mutate(
-        { avatarColor: chosen.bg },
+        { avatarUrl: chosen.src },
         { onSettled: () => setStep("success") }
       );
     } else {
       setStep("success");
     }
   };
+
+  // Helper to find the current selected avatar object
+  const activeAvatarObj = AVATAR_OPTIONS.find((a) => a.id === selectedAvatar);
 
   return (
     <main 
@@ -99,7 +102,6 @@ export default function SignupPage() {
                 Welcome
               </h1>
 
-              {/* Tabs with exact 24px styling */}
               <div className="flex items-center gap-10 mb-10">
                 <Link href="/login" className="text-[24px] font-[700] text-gray-500 hover:text-gray-300 tracking-[2px] transition-colors">
                   LOGIN
@@ -150,22 +152,15 @@ export default function SignupPage() {
             </div>
           </div>
 
-          {/* RIGHT SIDE: Cinematic Image */}
           <div className="flex-1 relative flex items-center justify-center p-[60px]">
-            <div 
-              className="relative w-full max-w-[850px] overflow-hidden rounded-[24px] shadow-2xl"
-              style={{ height: "528px" }}
-            >
+            <div className="relative w-full max-w-[850px] overflow-hidden rounded-[24px] shadow-2xl" style={{ height: "528px" }}>
               <Image src="/assets/auth.png" alt="" fill className="object-cover" priority />
-              <div 
-                className="absolute inset-y-0 left-0 w-32 z-10" 
-                style={{ background: "linear-gradient(to right, #030A1B 0%, transparent 100%)" }}
-              />
+              <div className="absolute inset-y-0 left-0 w-32 z-10" style={{ background: "linear-gradient(to right, #030A1B 0%, transparent 100%)" }} />
             </div>
           </div>
         </div>
       ) : step === "avatar" ? (
-        /* STEP 2: CHOOSE AVATAR (Full Screen Center) */
+        /* STEP 2: CHOOSE AVATAR */
         <div className="w-full h-full flex flex-col items-center justify-center animate-in fade-in duration-500">
           <h2 className="text-[32px] text-white mb-8">
             Hi <span className="font-bold">{form.username}</span>
@@ -173,9 +168,15 @@ export default function SignupPage() {
 
           <div className="relative mb-10">
             <div className="w-32 h-32 rounded-full bg-[#228EE5] flex items-center justify-center shadow-[0_0_40px_rgba(34,142,229,0.4)]">
-              <div className="w-[118px] h-[118px] rounded-full bg-[#030A1B] flex items-center justify-center overflow-hidden">
-                {selectedAvatar ? (
-                  <div className={`w-full h-full ${AVATAR_OPTIONS.find((a) => a.id === selectedAvatar)?.bg}`} />
+              {/* Preview Circle */}
+              <div className="relative w-[118px] h-[118px] rounded-full bg-[#030A1B] flex items-center justify-center overflow-hidden">
+                {selectedAvatar && activeAvatarObj ? (
+                  <Image 
+                    src={activeAvatarObj.src} 
+                    alt="Selected Avatar" 
+                    fill 
+                    className="object-cover"
+                  />
                 ) : (
                   <User className="w-12 h-12 text-[#228EE5]" />
                 )}
@@ -191,10 +192,14 @@ export default function SignupPage() {
                 key={avatar.id}
                 type="button"
                 onClick={() => setSelectedAvatar(avatar.id)}
-                className={`w-16 h-16 rounded-full ${avatar.bg} transition-all duration-300 ${
-                  selectedAvatar === avatar.id ? "scale-110 ring-4 ring-[#228EE5] ring-offset-4 ring-offset-[#030A1B]" : "opacity-60 hover:opacity-100"
+                className={`relative w-16 h-16 rounded-full overflow-hidden transition-all duration-300 ${
+                  selectedAvatar === avatar.id 
+                    ? "scale-110 ring-4 ring-[#228EE5] ring-offset-4 ring-offset-[#030A1B]" 
+                    : "opacity-60 hover:opacity-100"
                 }`}
-              />
+              >
+                <Image src={avatar.src} alt="Avatar" fill className="object-cover" />
+              </button>
             ))}
             <button className="w-16 h-16 rounded-full bg-white/5 border border-dashed border-white/20 flex items-center justify-center text-white/40 hover:bg-white/10 transition-all">
               <ImagePlus className="w-6 h-6" />
@@ -209,13 +214,18 @@ export default function SignupPage() {
           </button>
         </div>
       ) : (
-        /* STEP 3: SUCCESS (Full Screen Center) */
+        /* STEP 3: SUCCESS */
         <div className="w-full h-full flex flex-col items-center justify-center text-center animate-in fade-in zoom-in duration-700">
            <div className="relative mb-10">
               <div className="w-40 h-40 rounded-full bg-[#228EE5] flex items-center justify-center shadow-[0_0_60px_rgba(34,142,229,0.5)]">
-                 <div className="w-[148px] h-[148px] rounded-full bg-[#030A1B] flex items-center justify-center overflow-hidden">
-                    {selectedAvatar ? (
-                       <div className={`w-full h-full ${AVATAR_OPTIONS.find((a) => a.id === selectedAvatar)?.bg}`} />
+                 <div className="relative w-[148px] h-[148px] rounded-full bg-[#030A1B] flex items-center justify-center overflow-hidden">
+                    {selectedAvatar && activeAvatarObj ? (
+                       <Image 
+                         src={activeAvatarObj.src} 
+                         alt="Avatar" 
+                         fill 
+                         className="object-cover" 
+                       />
                     ) : (
                        <User className="w-16 h-16 text-[#228EE5]" />
                     )}

@@ -78,14 +78,7 @@ const Navbar = () => {
                 {/* Left Side: Logo */}
                 <div className="flex items-center gap-2 cursor-pointer">
                     <div className="relative flex items-center justify-center">
-                        {/* Custom SVG Logo based on image */}
-                        {/* <svg width="34" height="34" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M5 10C5 7.23858 7.23858 5 10 5H30C32.7614 5 35 7.23858 35 10V30C35 32.7614 32.7614 35 30 35H10C7.23858 35 5 32.7614 5 30V10Z" fill="white" fillOpacity="0.1" />
-                            <path d="M10 5L30 35M5 22.5H35M17.5 5V35" stroke="white" strokeWidth="1.5" strokeOpacity="0.2" />
-                            <path d="M8 12L14 8M16 12L22 8M24 12L30 8" stroke="white" strokeWidth="2" />
-                            <circle cx="25" cy="25" r="5" stroke="white" strokeWidth="2.5" />
-                            <path d="M25 22V28M22 25H28" stroke="white" strokeWidth="1.5" />
-                        </svg> */}
+                       
                         <img src="/assets/logo-light.png" style={{ width: 34, height: 34 }} />
                     </div>
                 </div>
@@ -133,15 +126,20 @@ const Navbar = () => {
                                 className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-full border border-white/15 transition-transform group-hover/profile:scale-105"
                                 title={user?.username || user?.name || "Account"}
                             >
-                                {user?.avatarColor ? (
-                                    <div className={`h-full w-full ${user.avatarColor}`} />
-                                ) : (
-                                    <img
-                                        src="/assets/user.png"
-                                        className="w-4 h-4 object-contain opacity-90 brightness-0 invert"
-                                        alt="User"
-                                    />
-                                )}
+                                {console.log(user)}
+                                {user?.avatarUrl ? (
+                                        <img
+                                            src={user.avatarUrl}
+                                            className="w-full h-full object-cover opacity-100"
+                                            alt="User"
+                                        />
+                                    ) : (
+                                        <img
+                                            src="/assets/user.png"
+                                            className="w-4 h-4 object-contain opacity-90 brightness-0 invert"
+                                            alt="User"
+                                        />
+                                    )}
                             </button>
 
                             {/* Logout capsule — appears below the avatar on hover */}

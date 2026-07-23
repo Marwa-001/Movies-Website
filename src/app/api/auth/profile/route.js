@@ -6,7 +6,7 @@ import { verifyToken, AUTH_COOKIE_NAME } from "@/lib/jwt";
 import { z } from "zod";
 
 const profileSchema = z.object({
-  avatarColor: z.string().min(1).max(120),
+  avatarUrl: z.string().min(1).max(120),
 });
 
 export async function PATCH(request) {
@@ -28,9 +28,9 @@ export async function PATCH(request) {
     await connectDB();
     const user = await User.findByIdAndUpdate(
       payload.sub,
-      { avatarColor: parsed.data.avatarColor },
+      { avatarUrl: parsed.data.avatarUrl },
       { new: true }
-    ).select("name username email avatarColor");
+    ).select("name username email avatarUrl");
 
     if (!user) {
       return NextResponse.json({ message: "User not found" }, { status: 404 });
@@ -42,7 +42,7 @@ export async function PATCH(request) {
         name: user.name,
         username: user.username,
         email: user.email,
-        avatarColor: user.avatarColor,
+        avatarUrl: user.avatarUrl,
       },
     });
   } catch (err) {

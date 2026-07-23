@@ -7,10 +7,12 @@ import { useRouter } from "next/navigation";
 import { ArrowLeft, User, Eye, EyeOff } from "lucide-react";
 import { loginSchema, flattenZodErrors } from "@/lib/zod-schemas";
 import { useLogin } from "@/hooks/useAuth";
+import { useAuthStore } from "@/store/useAuthStore";
 
 export default function LoginPage() {
   const router = useRouter();
   const login = useLogin();
+  const { user } = useAuthStore();
 
   const [step, setStep] = useState("form");
   const [showPassword, setShowPassword] = useState(false);
@@ -92,7 +94,7 @@ export default function LoginPage() {
                     name="email"
                     value={form.email}
                     onChange={handleChange}
-                    placeholder="User"
+                    placeholder="Email"
                     className="w-full bg-[#131927]/60 border border-white/10 rounded-xl px-5 py-4 text-[15px] text-white placeholder:text-gray-500 focus:outline-none focus:border-[#228EE5]/50 transition-all"
                   />
                   <User className="absolute right-5 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-500" />
@@ -161,22 +163,37 @@ export default function LoginPage() {
           </div>
         </div>
       ) : (
-        /* SUCCESS STATE - Full Screen */
-        <div className="w-full h-full flex flex-col items-center justify-center text-center animate-in fade-in duration-700">
-           <div className="relative mb-10">
-              <div className="w-40 h-40 rounded-full bg-[#228EE5] flex items-center justify-center shadow-[0_0_60px_rgba(34,142,229,0.5)]">
-                 <div className="w-[148px] h-[148px] rounded-full bg-[#030A1B] flex items-center justify-center">
-                    <User className="w-16 h-16 text-[#228EE5]" />
-                 </div>
-              </div>
-           </div>
-           <p className="text-[14px] font-bold text-gray-400 tracking-[3px] uppercase mb-12">
-              {form.email.split('@')[0]}
-           </p>
-           <h2 className="text-4xl font-medium text-white tracking-wide">
-              You have successfully logged in
-           </h2>
-        </div>
+       /* SUCCESS STATE */
+<div className="w-full h-full flex flex-col items-center justify-center text-center animate-in fade-in duration-700">
+   <div className="relative mb-10">
+      <div className="w-40 h-40 rounded-full bg-[#228EE5] flex items-center justify-center shadow-[0_0_60px_rgba(34,142,229,0.5)]">
+         
+         {/* Updated Container */}
+         <div className="relative w-[148px] h-[148px] rounded-full bg-[#030A1B] flex items-center justify-center overflow-hidden">
+            {user?.avatarUrl ? (
+               <Image 
+                  src={user.avatarUrl} 
+                  alt="User Avatar" 
+                  fill 
+                  className="object-cover" 
+               />
+            ) : (
+               <User className="w-16 h-16 text-[#228EE5]" />
+            )}
+         </div>
+         
+      </div>
+   </div>
+   
+   <p className="text-[14px] font-bold text-gray-400 tracking-[3px] uppercase mb-12">
+      {/* Show username if available, else show email prefix */}
+      {user?.username || form.email.split('@')[0]}
+   </p>
+   
+   <h2 className="text-4xl font-medium text-white tracking-wide">
+      You have successfully logged in
+   </h2>
+</div>
       )}
     </main>
   );
