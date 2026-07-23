@@ -38,7 +38,7 @@ function CollectionCard({ title, imageSrc }) {
 
         {/* Cinematic Overlay & Title */}
         <div className="absolute inset-0 bg-black/40 flex items-center justify-center p-4">
-          <h3 className="text-white text-[32px] font-bold text-center leading-tight tracking-tight drop-shadow-lg">
+          <h3 className="text-[var(--text-primary)] text-[32px] font-bold text-center leading-tight tracking-tight drop-shadow-lg">
             {title}
           </h3>
         </div>
@@ -78,19 +78,19 @@ export default function Collections() {
   return (
     <section className="mt-16 px-4 lg:px-12"  id="collections">
       <div className="flex justify-between items-center mb-10">
-        <h2 className="text-3xl font-bold text-white tracking-tight">Collection</h2>
+        <h2 className="text-3xl font-bold text-[var(--text-primary)] tracking-tight">Collection</h2>
 
         {/* Pixel Perfect Toggle */}
         <div className="flex bg-black/40 border border-white/10 rounded-full p-1 w-[120px] relative">
           <button
             onClick={() => setActiveTab("series")}
-            className={`flex-1 text-[10px] uppercase tracking-wider font-bold z-10 transition-colors duration-300 ${activeTab === 'series' ? 'text-white' : 'text-gray-500'}`}
+            className={`flex-1 text-[10px] uppercase tracking-wider font-bold z-10 transition-colors duration-300 ${activeTab === 'series' ? 'text-[var(--text-primary)]' : 'text-[var(--text-secondary)]'}`}
           >
             Series
           </button>
           <button
             onClick={() => setActiveTab("movies")}
-            className={`flex-1 text-[10px] uppercase tracking-wider font-bold z-10 transition-colors duration-300 ${activeTab === 'movies' ? 'text-white' : 'text-gray-500'}`}
+            className={`flex-1 text-[10px] uppercase tracking-wider font-bold z-10 transition-colors duration-300 ${activeTab === 'movies' ? 'text-[var(--text-primary)]' : 'text-[var(--text-secondary)]'}`}
           >
             Movies
           </button>
@@ -120,7 +120,7 @@ export default function Collections() {
         {/* See More Trigger */}
         <Link 
           href="/collections" 
-          className="flex items-center justify-center min-w-[120px] text-gray-500 hover:text-[#228EE5] font-bold transition-colors group shrink-0"
+          className="flex items-center justify-center min-w-[120px] text-[var(--text-secondary)] hover:text-[#228EE5] font-bold transition-colors group shrink-0"
         >
           See More <span className="ml-2 group-hover:translate-x-1 transition-transform">→</span>
         </Link>

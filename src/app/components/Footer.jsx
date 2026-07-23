@@ -41,7 +41,7 @@ const socialIcons = [
 
 export default function Footer() {
   return (
-    <footer className="relative w-full bg-[#020617] pt-20 pb-16 px-6 font-sans overflow-hidden">
+    <footer className="relative w-full bg-[var(--bg-page)] pt-20 pb-16 px-6 font-sans overflow-hidden">
       {/* Background radial glow */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_-20%,_#1e293b_0%,_transparent_70%)] opacity-40 pointer-events-none" />
 
@@ -52,7 +52,7 @@ export default function Footer() {
             <a
               key={link.label}
               href={link.href}
-              className="group flex items-center gap-1.5 text-[15px] font-medium text-white hover:text-blue-400 transition-colors"
+              className="group flex items-center gap-1.5 text-[15px] font-medium text-[var(--text-primary)] hover:text-blue-400 transition-colors"
             >
               {link.label}
               <ChevronRightIcon />
@@ -66,7 +66,7 @@ export default function Footer() {
             <a
               key={link.label}
               href={link.href}
-              className="group flex items-center gap-1.5 text-[15px] font-medium text-white hover:text-blue-400 transition-colors"
+              className="group flex items-center gap-1.5 text-[15px] font-medium text-[var(--text-primary)] hover:text-blue-400 transition-colors"
             >
               {link.label}
               <ChevronRightIcon />
@@ -82,7 +82,7 @@ export default function Footer() {
               key={icon.label}
               href="#"
               aria-label={icon.label}
-              className="text-white hover:text-sky-400 transition-all duration-200 transform hover:scale-110"
+              className="text-[var(--text-primary)] hover:text-sky-400 transition-all duration-200 transform hover:scale-110"
             >
               <svg
                 viewBox="0 0 24 24"
@@ -110,7 +110,7 @@ function ChevronRightIcon() {
       strokeWidth="3"
       strokeLinecap="round"
       strokeLinejoin="round"
-      className="text-white/40 group-hover:text-blue-400"
+      className="text-[var(--text-primary)]/40 group-hover:text-blue-400"
     >
       <path d="m9 18 6-6-6-6" />
     </svg>

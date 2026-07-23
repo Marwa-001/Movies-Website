@@ -32,13 +32,13 @@ export default function FAQs() {
   };
 
   return (
-    <section id="faqs" className="relative w-full bg-[#020617] py-24 px-6 overflow-hidden">
+    <section id="faqs" className="relative w-full bg-[var(--bg-page)] py-24 px-6 overflow-hidden">
       {/* Background Radial Glow to match the deep blue/purple vibe */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_50%,_#1e1b4b_0%,_transparent_50%)] opacity-40 pointer-events-none" />
 
       <div className="relative z-10 max-w-4xl mx-auto flex flex-col items-center">
         {/* Section Header */}
-        <h2 className="text-3xl md:text-[48px] font-[700] text-white text-center mb-16 tracking-tight">
+        <h2 className="text-3xl md:text-[48px] font-[700] text-[var(--text-primary)] text-center mb-16 tracking-tight">
           The Omni Questions Everyone`s Asking
         </h2>
 
@@ -53,12 +53,12 @@ export default function FAQs() {
               {/* This div creates the thin magenta/purple gradient border effect */}
               <div className="absolute -inset-[1px] bg-gradient-to-r from-purple-500/30 via-pink-500/20 to-purple-500/30 rounded-2xl opacity-100" />
               
-              <div className="relative bg-[#020617] rounded-2xl px-6 py-5 flex items-center justify-between border border-white/5 transition-all duration-300 group-hover:border-white/20">
-                <span className="text-lg font-medium text-white tracking-wide">
+              <div className="relative bg-[var(--bg-page)] rounded-2xl px-6 py-5 flex items-center justify-between border border-white/5 transition-all duration-300 group-hover:border-white/20">
+                <span className="text-lg font-medium text-[var(--text-primary)] tracking-wide">
                   {item.question}
                 </span>
                 <ChevronDown 
-                  className={`w-5 h-5 text-white/70 transition-transform duration-300 ${
+                  className={`w-5 h-5 text-[var(--text-primary)]/70 transition-transform duration-300 ${
                     openIndex === index ? 'rotate-180' : ''
                   }`} 
                 />
@@ -66,7 +66,7 @@ export default function FAQs() {
 
               {/* Answer content (Optional: can be animated with Framer Motion if you have it) */}
               {openIndex === index && (
-                <div className="relative px-6 py-4 text-white/60 text-sm leading-relaxed bg-[#020617] rounded-b-2xl -mt-2 border-x border-b border-white/5">
+                <div className="relative px-6 py-4 text-[var(--text-primary)]/60 text-sm leading-relaxed bg-[var(--bg-page)] rounded-b-2xl -mt-2 border-x border-b border-white/5">
                   {item.answer}
                 </div>
               )}
@@ -76,7 +76,7 @@ export default function FAQs() {
 
         {/* Studios Title */}
         <div className="flex flex-col items-center mb-10 w-full">
-            <h3 className="text-[48px] font-[700] text-white mb-6">Studios</h3>
+            <h3 className="text-[48px] font-[700] text-[var(--text-primary)] mb-6">Studios</h3>
             
         </div>
 

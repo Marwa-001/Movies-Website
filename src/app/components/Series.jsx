@@ -19,19 +19,20 @@ export default function Series({ genres, onAdd, onSeeMore }) {
 
   if (isLoading) {
     return (
-      <div className="bg-[#050514]">
+      <div className="bg-[var(--bg-page)]">
         <PosterRowSkeleton heading="Series" />
       </div>
     );
   }
 
   return (
-    <div className="bg-[#050514]" id="series"> {/* Deep navy/black background matching the screenshot */}
+    <div className="bg-[var(--bg-page)]" id="series"> {/* Deep navy/black background matching the screenshot */}
       <PosterRow
         heading="Series"
         items={items || []}
         onAdd={onAdd}
         onSeeMore={onSeeMore}
+        linkBase="/series"
         filters={
           <GenreFilter
             genres={genres}

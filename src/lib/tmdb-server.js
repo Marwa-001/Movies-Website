@@ -121,6 +121,8 @@ export async function getMovieDetails(id) {
     title: data.title,
     tagline: data.tagline || "",
     overview: data.overview || "",
+    posterPath: data.poster_path || null,
+    backdropPath: data.backdrop_path || null,
     posterUrl: getTmdbImageUrl(data.poster_path, "w500"),
     backdropUrl: getTmdbImageUrl(data.backdrop_path, "original"),
     year,
@@ -216,5 +218,71 @@ export async function getThematicCollectionDetails(type, mediaType = "movie") {
     imageSrc: getTmdbImageUrl(results[0]?.poster_path, "w500"),
     backdropSrc: getTmdbImageUrl(results[0]?.backdrop_path, "original"),
     items: results.slice(0, 10).map((r) => mapper(r, idMap)),
+  };
+}
+
+/**
+ * Fetches the best available YouTube trailer/teaser key for a movie or tv
+ * show, straight from TMDB — never hardcoded.
+ */
+export async function getVideoKey(id, mediaType = "movie") {
+  const endpoint = mediaType === "tv" ? `/tv/${id}/videos` : `/movie/${id}/videos`;
+  const data = await tmdbFetch(endpoint);
+  const results = data.results || [];
+
+  const trailer =
+    results.find((v) => v.site === "YouTube" && v.type === "Trailer" && v.official) ||
+    results.find((v) => v.site === "YouTube" && v.type === "Trailer") ||
+    results.find((v) => v.site === "YouTube" && v.type === "Teaser") ||
+    results.find((v) => v.site === "YouTube");
+
+  return trailer ? trailer.key : null;
+}
+
+/**
+ * Full detail payload for the series detail page: banner, gallery, cast,
+ * creator, genres, and "Suggestion like ..." row (TMDB recommendations).
+ */
+export async function getSeriesDetails(id) {
+  const data = await tmdbFetch(`/tv/${id}`, {
+    append_to_response: "credits,images,recommendations",
+    include_image_language: "en,null",
+  });
+
+  const creator = (data.created_by || [])[0];
+  const country = data.origin_country?.[0] || null;
+  const year = data.first_air_date ? data.first_air_date.slice(0, 4) : null;
+
+  return {
+    id: String(data.id),
+    title: data.name,
+    tagline: data.tagline || "",
+    overview: data.overview || "",
+    posterPath: data.poster_path || null,
+    backdropPath: data.backdrop_path || null,
+    posterUrl: getTmdbImageUrl(data.poster_path, "w500"),
+    backdropUrl: getTmdbImageUrl(data.backdrop_path, "original"),
+    year,
+    country,
+    isAdult: !!data.adult,
+    numberOfSeasons: data.number_of_seasons || null,
+    numberOfEpisodes: data.number_of_episodes || null,
+    voteAverage: data.vote_average || 0,
+    genres: (data.genres || []).map((g) => g.name),
+    gallery: (data.images?.backdrops || [])
+      .slice(0, 6)
+      .map((img) => getTmdbImageUrl(img.file_path, "w300")),
+    cast: (data.credits?.cast || []).slice(0, 8).map((c) => ({
+      id: String(c.id),
+      name: c.name,
+      character: c.character,
+      photoUrl: getTmdbImageUrl(c.profile_path, "w185"),
+    })),
+    creator: creator
+      ? { id: String(creator.id), name: creator.name, photoUrl: getTmdbImageUrl(creator.profile_path, "w185") }
+      : null,
+    recommendations: (data.recommendations?.results || [])
+      .slice(0, 6)
+      .map((item) => mapTvToCard(item, TV_ID_TO_NAME)),
   };
 }

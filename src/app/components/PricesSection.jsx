@@ -34,7 +34,7 @@ const PricingCard = ({ plan }) => {
         relative z-10 w-[300px] rounded-[40px] flex flex-col items-center py-10 px-6 overflow-visible transition-transform duration-500 group-hover:scale-105
         ${
           isSuggested
-            ? "bg-gradient-to-b from-[#00A3FF] via-[#0088FF] to-[#2E5BFF] text-white shadow-[0_0_40px_rgba(0,163,255,0.3)] h-[580px]"
+            ? "bg-gradient-to-b from-[#00A3FF] via-[#0088FF] to-[#2E5BFF] text-[var(--text-primary)] shadow-[0_0_40px_rgba(0,163,255,0.3)] h-[580px]"
             : "bg-[#E2F1F8] text-[#1A73E8] h-[500px] shadow-xl"
         }
       `}
@@ -48,9 +48,9 @@ const PricingCard = ({ plan }) => {
         {/* Ticket Seam Section */}
         <div className="relative w-full my-8 flex items-center justify-center">
           {/* Left Circle Cutout */}
-          <div className={`absolute -left-10 w-8 h-8 rounded-full bg-[#050514]`} />
+          <div className={`absolute -left-10 w-8 h-8 rounded-full bg-[var(--bg-page)]`} />
           {/* Right Circle Cutout */}
-          <div className={`absolute -right-10 w-8 h-8 rounded-full bg-[#050514]`} />
+          <div className={`absolute -right-10 w-8 h-8 rounded-full bg-[var(--bg-page)]`} />
           {/* Dashed Line */}
           <div
             className={`w-full border-t-2 border-dashed ${
@@ -80,7 +80,7 @@ const PricingCard = ({ plan }) => {
           ${
             isSuggested
               ? "bg-[#E2F1F8] text-[#1A73E8] hover:bg-white shadow-lg"
-              : "bg-[#1A73E8] text-white hover:bg-[#1557b0]"
+              : "bg-[#1A73E8] text-[var(--text-primary)] hover:bg-[#1557b0]"
           }
         `}
         >
@@ -106,7 +106,7 @@ export default function PricingSection() {
   ];
 
   return (
-    <section id="pricing" className="min-h-screen bg-[#050514] flex flex-wrap items-center justify-center gap-10 py-24 px-10">
+    <section id="pricing" className="min-h-screen bg-[var(--bg-page)] flex flex-wrap items-center justify-center gap-10 py-24 px-10">
       {plans.map((plan, idx) => (
         <PricingCard key={idx} plan={plan} />
       ))}

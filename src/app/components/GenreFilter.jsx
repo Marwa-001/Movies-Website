@@ -16,8 +16,7 @@ export default function GenreFilter({ genres, activeGenres, onToggle }) {
         type="button"
         aria-label="Scroll genres left"
         onClick={() => scrollBy(-1)}
-        className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full text-white/50 transition-colors hover:text-white"
-      >
+        className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full text-[var(--text-secondary)] transition-colors hover:text-[var(--text-primary)]">
         <ChevronLeft className="h-5 w-5" />
       </button>
 
@@ -31,7 +30,7 @@ export default function GenreFilter({ genres, activeGenres, onToggle }) {
               onClick={() => onToggle(genre)}
               aria-pressed={isActive}
               className={`flex-shrink-0 whitespace-nowrap rounded-full px-5 py-2 text-sm font-medium transition-colors duration-200 ${
-                isActive ? "bg-[#E5228E] text-white" : "bg-white/5 text-white/70 hover:bg-white/10"
+                isActive ? "bg-[#E5228E] text-white" : "bg-[var(--bg-surface)] text-[var(--text-secondary)] hover:bg-[var(--bg-surface-strong)]"
               }`}
             >
               {genre}
@@ -44,7 +43,7 @@ export default function GenreFilter({ genres, activeGenres, onToggle }) {
         type="button"
         aria-label="Scroll genres right"
         onClick={() => scrollBy(1)}
-        className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full text-white/50 transition-colors hover:text-white"
+        className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full text-[var(--text-secondary)] transition-colors hover:text-[var(--text-primary)]"
       >
         <ChevronRight className="h-5 w-5" />
       </button>

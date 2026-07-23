@@ -16,15 +16,26 @@
 
 @layer base {
   /* Dark theme (default) matches the original deep navy/black UI exactly. */
-  html.dark body {
-    background-color: #050514;
-    color: white;
+  html.dark {
+    --bg-page: #050514;
+    --bg-elevated: #0a0c1a;
+    --bg-surface: rgba(255, 255, 255, 0.05);
+    --bg-surface-strong: rgba(255, 255, 255, 0.10);
+    --border-subtle: rgba(255, 255, 255, 0.10);
+    --text-primary: #ffffff;
+    --text-secondary: #9ca3af;
+    --icon-filter: brightness(0) invert(1); /* white icons on dark */
   }
 
-  /* Light theme is additive only — toggled via useThemeStore + Navbar. */
-  html.light body {
-    background-color: #f5f6fa;
-    color: #0a0c10;
+  html.light {
+    --bg-page: #f5f6fa;
+    --bg-elevated: #ffffff;
+    --bg-surface: rgba(10, 12, 16, 0.04);
+    --bg-surface-strong: rgba(10, 12, 16, 0.08);
+    --border-subtle: rgba(10, 12, 16, 0.10);
+    --text-primary: #0a0c10;
+    --text-secondary: #4b5563;
+    --icon-filter: none; /* keep icons dark on light */
   }
 
   body {

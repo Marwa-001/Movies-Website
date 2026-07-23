@@ -15,7 +15,7 @@ export default async function SingleCollectionPage({ params }) {
 console.log("Collection Data:", data); // Check if backdropSrc or backdrop_path exists
 
   return (
-    <main className="min-h-screen bg-[#050514] pb-20">
+   <main className="min-h-screen bg-[var(--bg-page)] text-[var(--text-primary)] pb-20">
       <Navbar />
 <section className="relative w-full h-[420px] rounded-[32px] overflow-hidden mb-16 flex flex-col justify-center px-12">
           <div className="absolute inset-0 z-0">

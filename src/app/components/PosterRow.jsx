@@ -7,7 +7,7 @@ export default function PosterRow({ heading, items, onAdd, onSeeMore, filters, l
   return (
     <section className="py-16 px-6 lg:px-12">
       <div className="mb-10 flex items-center justify-between">
-        <h2 className="text-5xl font-bold tracking-tight text-white">{heading}</h2>
+        <h2 className="text-5xl font-bold tracking-tight text-[var(--text-primary)]">{heading}</h2>
         <button
           type="button"
           onClick={onSeeMore}

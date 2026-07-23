@@ -79,7 +79,10 @@ const Navbar = () => {
                 <div className="flex items-center gap-2 cursor-pointer">
                     <div className="relative flex items-center justify-center">
                        
-                        <img src="/assets/logo-light.png" style={{ width: 34, height: 34 }} />
+                            <img
+                                src={theme === 'dark' ? '/assets/logo-light.png' : '/assets/logo-dark.png'}
+                                style={{ width: 34, height: 34 }}
+                            />
                     </div>
                 </div>
 
@@ -90,7 +93,7 @@ const Navbar = () => {
                             <Link
                                 href={link.href}
                                 onClick={() => setActiveTab(link.name)}
-                                className={`text-[15px] font-medium transition-colors duration-300 pb-1 ${activeTab === link.name ? "text-white" : "text-gray-400 hover:text-white"
+                                className={`text-[15px] font-medium transition-colors duration-300 pb-1 ${activeTab === link.name ? "text-[var(--text-primary)]" : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
                                     }`}
                             >
                                 {link.name}
@@ -110,7 +113,8 @@ const Navbar = () => {
                         <img
                             src="/assets/magnifying-glass.png"
                             alt="Search"
-                            className="w-5 h-5 object-contain opacity-70 group-hover:opacity-100 brightness-0 invert transition-opacity"
+                                className="w-5 h-5 object-contain opacity-70 group-hover:opacity-100 transition-opacity"
+                                style={{ filter: 'var(--icon-filter)' }}
                         />
                     </button>
 
@@ -136,7 +140,8 @@ const Navbar = () => {
                                     ) : (
                                         <img
                                             src="/assets/user.png"
-                                            className="w-4 h-4 object-contain opacity-90 brightness-0 invert"
+                                            className="w-4 h-4 object-contain opacity-90"
+                                            style={{ filter: 'var(--icon-filter)' }}
                                             alt="User"
                                         />
                                     )}
@@ -179,12 +184,12 @@ const Navbar = () => {
                         aria-label="Toggle Theme"
                         className="flex items-center justify-center transition-all duration-300 hover:opacity-100 opacity-80 active:scale-90"
                     >
-                        <img
-                            src={theme === 'dark' ? '/assets/sun.png' : '/assets/moon.png'}
-                            alt="Toggle Theme"
-                            className="h-[20px] w-[20px] object-contain brightness-0 invert"
-                            onError={(e) => { e.currentTarget.src = '/assets/sun.png'; }}
-                        />
+                            <img
+                                src={theme === 'dark' ? '/assets/sun.png' : '/assets/moon.png'}
+                                alt="Toggle Theme"
+                                className="h-[20px] w-[20px] object-contain"
+                                style={{ filter: 'var(--icon-filter)' }}
+                            />
                     </button>
                 </div>
             </div>

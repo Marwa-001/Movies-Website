@@ -44,3 +44,8 @@ export async function fetchMovieDetails(id) {
   const data = await getJson(`/api/tmdb/movie/${id}`);
   return data.movie || null;
 }
+
+export async function fetchSeriesDetails(id) {
+  const data = await getJson(`/api/tmdb/series/${id}`);
+  return data.series || null;
+}

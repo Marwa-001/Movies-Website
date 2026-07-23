@@ -29,7 +29,7 @@ export default function Home() {
   };
 
   return (
-    <>
+    <div className="bg-[var(--bg-page)] text-[var(--text-primary)]">
       {/* <Navbar /> */}
       <Hero />
       <Trends onAdd={handleAdd} onSeeMore={() => router.push("/movies")} />
@@ -43,6 +43,6 @@ export default function Home() {
       <KidsSection />
       <FAQs />
       <Footer />
-    </>
+      </div>
   );
 }

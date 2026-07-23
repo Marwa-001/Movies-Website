@@ -100,8 +100,8 @@ const Hero = () => {
         className="absolute inset-0 z-0 bg-cover bg-center transition-[background-image] duration-700"
         style={{ backgroundImage: `url('${active.backdropSrc || active.imageSrc}')` }}
       >
-        <div className="absolute inset-0 bg-gradient-to-r from-[#05070a] via-[#05070a]/10 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#05070a] via-transparent to-transparent" />
+               <div className="absolute inset-0 bg-gradient-to-r from-[var(--bg-page)] via-[var(--bg-page)]/10 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-page)] via-transparent to-transparent" />
       </div>
 
       <Navbar />
@@ -114,7 +114,7 @@ const Hero = () => {
         </h1>
 
         {/* PARAGRAPH (16pt Medium from style guide) */}
-        <p className="p-medium text-gray-300 max-w-xl mb-10 opacity-90 line-clamp-3">
+        <p className="p-medium text-[var(--text-secondary)] max-w-xl mb-10 opacity-90 line-clamp-3">
           {active.overview || FALLBACK.overview}
         </p>
 
@@ -129,7 +129,7 @@ const Hero = () => {
               alt="IMDb"
               className="h-[20px] w-[37px] object-cover object-left"
             />
-            <span className="text-white text-[16px] font-medium leading-none">
+            <span className="text-[var(--text-primary)] text-[16px] font-medium leading-none">
               {active.voteAverage ? active.voteAverage.toFixed(1) : FALLBACK.voteAverage}
             </span>
           </div>
@@ -147,7 +147,7 @@ const Hero = () => {
           <button className="bg-[#228EE5] hover:bg-blue-600 px-10 py-4 rounded-full font-[500] text-[16px] transition-all flex items-center gap-2 w-[168px] h-[40px] flex justify-center">
             <img src='/assets/play.png' className='w-[16px] h-[16px]' alt="" /> <span style={{ whiteSpace: 'nowrap' }}> Whatch Movie</span>
           </button>
-          <button className="border border-white/40 hover:bg-white/10 px-10 py-4 rounded-full font-[500] text-[16px] transition-all flex items-center gap-2 w-[128px] h-[40px]  flex justify-center">
+          <button className="border border-[var(--border-subtle)] text-[var(--text-primary)] hover:bg-[var(--bg-surface)] px-10 py-4 rounded-full font-[500] text-[16px] transition-all flex items-center gap-2 w-[128px] h-[40px]  flex justify-center">
             <span style={{ whiteSpace: 'nowrap' }}>More Info</span> <span>→</span>
           </button>
         </div>
@@ -159,14 +159,14 @@ const Hero = () => {
         {/* Card 1 (Left) */}
         <div
           onClick={() => goTo(-1)}
-          className="w-[122px] h-[122px] rounded-[20px] overflow-hidden border border-white/10 transition-all hover:scale-105 cursor-pointer relative z-10"
+          className="w-[122px] h-[122px] rounded-[20px] overflow-hidden border border-[var(--border-subtle)] transition-all hover:scale-105 cursor-pointer relative z-10"
         >
           <img
             src={order[0].imageSrc}
             className="w-full h-full object-cover"
             alt={order[0].title}
           />
-          <div className="absolute inset-0 bg-black/50" /> {/* Slight dimming */}
+          <div className="absolute inset-0 bg-black/30" /> {/* Slight dimming */}
         </div>
 
         {/* Card 2 (Main Focused Card) */}
@@ -181,7 +181,7 @@ const Hero = () => {
         {/* Card 3 (Overlapped) */}
         <div
           onClick={() => goTo(1)}
-          className="w-[122px] h-[122px] rounded-[20px] overflow-hidden border border-white/10 relative z-30 -ml-10 transition-all hover:scale-105 cursor-pointer"
+         className="w-[122px] h-[122px] rounded-[20px] overflow-hidden border border-[var(--border-subtle)] relative z-30 -ml-10 transition-all hover:scale-105 cursor-pointer"
         >
           <img
             src={order[2].imageSrc}
@@ -194,7 +194,7 @@ const Hero = () => {
         {/* Card 4 (Far Right) */}
         <div
           onClick={() => goTo(2)}
-          className="w-[122px] h-[122px] rounded-[20px] overflow-hidden border border-white/10 relative z-20 -ml-10 opacity-60 transition-all hover:opacity-100 hover:scale-105 cursor-pointer"
+          className="w-[122px] h-[122px] rounded-[20px] overflow-hidden border border-[var(--border-subtle)] relative z-20 -ml-10 opacity-60 transition-all hover:opacity-100 hover:scale-105 cursor-pointer"
         >
           <img
             src={order[3].imageSrc}

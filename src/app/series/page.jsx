@@ -30,7 +30,7 @@ export default function SeriesPage() {
 
   return (
     <>
-      <div className="relative pt-40 pb-8 px-12 lg:px-24 bg-[#050514]">
+      <div className="relative pt-40 pb-8 px-12 lg:px-24 bg-[var(--bg-page)] text-[var(--text-primary)]">
         <Navbar />
         <h1 className="text-5xl font-bold tracking-tight text-white mb-10">Series</h1>
 
@@ -44,7 +44,7 @@ export default function SeriesPage() {
           onSearchChange={setSearch}
         />
 
-        {isLoading ? <CatalogGridSkeleton /> : <CatalogGrid items={items} onAdd={handleAdd} />}
+        {isLoading ? <CatalogGridSkeleton /> : <CatalogGrid items={items} onAdd={handleAdd} linkBase="/series" />}
       </div>
       <Footer />
     </>

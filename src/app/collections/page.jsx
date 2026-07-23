@@ -13,7 +13,7 @@ export default async function CollectionsPage() {
 
   return (
     <>
-      <main className="min-h-screen bg-[#050514] pb-20">
+     <main className="min-h-screen bg-[var(--bg-page)] text-[var(--text-primary)] pb-20">
         <Navbar />
 
         {/* 1. HERO SECTION */}

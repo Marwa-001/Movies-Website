@@ -15,9 +15,9 @@ export function Cast() {
   const [role, setRole] = useState("Actors"); // 'Directors' or 'Actors'
 
   return (
-    <section className="py-8 px-12 lg:px-24 bg-[#050514]">
+    <section className="py-8 px-12 lg:px-24 bg-[var(--bg-page)]">
       <div className="flex items-center justify-between mb-8">
-        <h2 className="text-3xl font-bold text-white">Characters</h2>
+        <h2 className="text-3xl font-bold text-[var(--text-primary)]">Characters</h2>
 
         {/* Custom Toggle Switch */}
         <div className="relative flex items-center bg-[#0a0c1a] border border-white/10 rounded-full p-1 w-44">
@@ -28,13 +28,13 @@ export function Cast() {
           />
           <button 
             onClick={() => setRole("Directors")}
-            className={`relative z-10 flex-1 text-center text-xs font-semibold transition-colors ${role === "Directors" ? "text-white" : "text-gray-500"}`}
+            className={`relative z-10 flex-1 text-center text-xs font-semibold transition-colors ${role === "Directors" ? "text-[var(--text-primary)]" : "text-gray-500"}`}
           >
             Directors
           </button>
           <button 
             onClick={() => setRole("Actors")}
-            className={`relative z-10 flex-1 text-center text-xs font-semibold transition-colors ${role === "Actors" ? "text-white" : "text-gray-500"}`}
+            className={`relative z-10 flex-1 text-center text-xs font-semibold transition-colors ${role === "Actors" ? "text-[var(--text-primary)]" : "text-gray-500"}`}
           >
             Actors
           </button>

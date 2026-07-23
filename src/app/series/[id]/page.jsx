@@ -6,10 +6,9 @@ import { Play } from "lucide-react";
 import Navbar from "../../components/Navbar";
 import PosterRow from "../../components/PosterRow";
 import Footer from "../../components/Footer";
-import { useMovieDetails } from "@/hooks/useMovieDetails";
+import { useSeriesDetails } from "../../../hooks/useSeriesDetail";
 
 function StarRating({ rating = 0 }) {
-  // rating comes in on TMDB's 0-10 scale; render as 5 stars.
   const stars = rating / 2;
   return (
     <div className="flex items-center gap-1">
@@ -49,8 +48,6 @@ function StarRating({ rating = 0 }) {
   );
 }
 
-// Static placeholder comments — no comments backend exists yet, this just
-// mirrors the design. Swap for real data once a comments API is added.
 const placeholderComments = [
   { id: "c1", name: "Ava01" },
   { id: "c2", name: "Marcus_R" },
@@ -59,10 +56,10 @@ const placeholderComments = [
   { id: "c5", name: "reelviews" },
 ];
 
-export default function MovieDetailPage() {
+export default function SeriesDetailPage() {
   const { id } = useParams();
-  const { data: movie, isLoading, isError } = useMovieDetails(id);
-  const router = useRouter()
+  const router = useRouter();
+  const { data: series, isLoading, isError } = useSeriesDetails(id);
 
   if (isLoading) {
     return (
@@ -72,7 +69,7 @@ export default function MovieDetailPage() {
     );
   }
 
-  if (isError || !movie) {
+  if (isError || !series) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#050514]">
         <p className="text-white/50">Couldn&apos;t load this title. It may not exist.</p>
@@ -80,11 +77,19 @@ export default function MovieDetailPage() {
     );
   }
 
+  const goToWatch = () => {
+    const params = new URLSearchParams({
+      title: series.title,
+      poster: series.posterPath || "",
+      backdrop: series.backdropPath || "",
+    });
+    router.push(`/watch/tv/${series.id}?${params.toString()}`);
+  };
+
   return (
     <>
-      {/* Backdrop hero */}
-      <section className="relative pt-40 pb-8 px-12 lg:px-24 bg-[var(--bg-page)] text-[var(--text-primary)]">
-        <div className="absolute inset-0 z-0 bg-cover bg-center" style={{ backgroundImage: `url('${movie.backdropUrl}')` }}>
+      <section className="relative w-full min-h-[70vh] flex flex-col items-start justify-end px-12 lg:px-24 pb-16 overflow-hidden">
+        <div className="absolute inset-0 z-0 bg-cover bg-center" style={{ backgroundImage: `url('${series.backdropUrl}')` }}>
           <div className="absolute inset-0 bg-gradient-to-r from-[#05070a] via-[#05070a]/40 to-transparent" />
           <div className="absolute inset-0 bg-gradient-to-t from-[#05070a] via-[#05070a]/20 to-transparent" />
         </div>
@@ -92,44 +97,37 @@ export default function MovieDetailPage() {
         <Navbar />
 
         <div className="relative z-10 mt-32 max-w-2xl">
-          <h1 className="tracking-tight mb-3 drop-shadow-2xl">{movie.title}</h1>
+          <h1 className="tracking-tight mb-3 drop-shadow-2xl text-[var(--text-primary)]">{series.title}</h1>
 
           <div className="flex items-center gap-2 text-sm text-gray-300 mb-4">
-            <span>{movie.isAdult ? "18+" : "PG"}</span>
-            {movie.year && (
+            <span>{series.isAdult ? "18+" : "PG"}</span>
+            {series.year && (
               <>
                 <span className="opacity-40">•</span>
-                <span>{movie.year}</span>
+                <span>{series.year}</span>
               </>
             )}
-            {movie.country && (
+            {series.numberOfSeasons && (
               <>
                 <span className="opacity-40">•</span>
-                <span>{movie.country}</span>
+                <span>{series.numberOfSeasons} Season{series.numberOfSeasons > 1 ? "s" : ""}</span>
               </>
             )}
           </div>
 
-          {movie.tagline && <p className="p-medium text-gray-300 mb-6 opacity-90">{movie.tagline}</p>}
+          {series.tagline && <p className="p-medium text-gray-300 mb-6 opacity-90">{series.tagline}</p>}
 
           <div className="flex items-center gap-6 mb-8">
-            <StarRating rating={movie.voteAverage} />
+            <StarRating rating={series.voteAverage} />
             <div className="flex items-center gap-3">
               <img src="/assets/imdb.png" alt="IMDb" className="h-[20px] w-[37px] object-cover object-left" />
-              <span className="text-white text-[16px] font-medium leading-none">{movie.voteAverage.toFixed(1)}</span>
+              <span className="text-white text-[16px] font-medium leading-none">{series.voteAverage.toFixed(1)}</span>
             </div>
           </div>
 
           <div className="flex items-center gap-2">
             <button
-              onClick={() => {
-                const params = new URLSearchParams({
-                  title: movie.title,
-                  poster: movie.posterPath || "",
-                  backdrop: movie.backdropPath || "",
-                });
-                router.push(`/watch/movie/${movie.id}?${params.toString()}`);
-              }}
+              onClick={goToWatch}
               className="bg-[#228EE5] hover:bg-blue-600 px-10 py-4 rounded-full font-[500] text-[16px] transition-all flex items-center gap-2 h-[40px] justify-center"
             >
               <Play className="w-4 h-4" fill="white" />
@@ -142,13 +140,12 @@ export default function MovieDetailPage() {
         </div>
       </section>
 
-      {/* Gallery */}
-      {movie.gallery.length > 0 && (
+      {series.gallery.length > 0 && (
         <div className="px-12 lg:px-24 -mt-8 relative z-10">
           <div className="no-scrollbar flex gap-4 overflow-x-auto pb-2">
-            {movie.gallery.map((src, i) => (
+            {series.gallery.map((src, i) => (
               <div key={i} className="relative w-40 h-24 flex-shrink-0 rounded-xl overflow-hidden border border-white/10">
-                <Image src={src || null} alt={`${movie.title} still ${i + 1}`} fill sizes="160px" className="object-cover" />
+                <Image src={src || null} alt={`${series.title} still ${i + 1}`} fill sizes="160px" className="object-cover" />
               </div>
             ))}
           </div>
@@ -156,20 +153,18 @@ export default function MovieDetailPage() {
       )}
 
       <div className="px-12 lg:px-24 py-16 space-y-16">
-        {/* About */}
-        {movie.overview && (
+        {series.overview && (
           <section>
-            <h3 className="text-2xl font-bold text-white mb-4">about {movie.title}</h3>
-            <p className="text-gray-300 leading-relaxed max-w-4xl">{movie.overview}</p>
+            <h3 className="text-2xl font-bold text-white mb-4">about {series.title}</h3>
+            <p className="text-gray-300 leading-relaxed max-w-4xl">{series.overview}</p>
           </section>
         )}
 
-        {/* Genres */}
-        {movie.genres.length > 0 && (
+        {series.genres.length > 0 && (
           <section>
             <h3 className="text-2xl font-bold text-white mb-4">Genres</h3>
             <div className="flex flex-wrap gap-3">
-              {movie.genres.map((g) => (
+              {series.genres.map((g) => (
                 <span key={g} className="rounded-full px-5 py-2 text-sm font-medium bg-[#E5228E] text-white">
                   {g}
                 </span>
@@ -178,12 +173,11 @@ export default function MovieDetailPage() {
           </section>
         )}
 
-        {/* Characters */}
-        {movie.cast.length > 0 && (
+        {series.cast.length > 0 && (
           <section>
             <h3 className="text-2xl font-bold text-white mb-4">Characters</h3>
             <div className="flex flex-wrap gap-6">
-              {movie.cast.map((c) => (
+              {series.cast.map((c) => (
                 <div key={c.id} className="w-16 text-center">
                   <div className="relative w-16 h-16 rounded-full overflow-hidden border border-white/10 bg-white/5 mx-auto">
                     <Image src={c.photoUrl || null} alt={c.name} fill sizes="64px" className="object-cover" />
@@ -197,22 +191,20 @@ export default function MovieDetailPage() {
           </section>
         )}
 
-        {/* Director */}
-        {movie.director && (
+        {series.creator && (
           <section>
-            <h3 className="text-2xl font-bold text-white mb-4">Director</h3>
+            <h3 className="text-2xl font-bold text-white mb-4">Creator</h3>
             <div className="w-16 text-center">
               <div className="relative w-16 h-16 rounded-full overflow-hidden border border-white/10 bg-white/5 mx-auto">
-                <Image src={movie.director.photoUrl || null} alt={movie.director.name} fill sizes="64px" className="object-cover" />
+                <Image src={series.creator.photoUrl || null} alt={series.creator.name} fill sizes="64px" className="object-cover" />
               </div>
-              <p className="mt-2 text-xs text-gray-400 truncate" title={movie.director.name}>
-                {movie.director.name}
+              <p className="mt-2 text-xs text-gray-400 truncate" title={series.creator.name}>
+                {series.creator.name}
               </p>
             </div>
           </section>
         )}
 
-        {/* Comments (static placeholder — no comments backend yet) */}
         <section>
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-2xl font-bold text-white">Comments</h3>
@@ -222,10 +214,7 @@ export default function MovieDetailPage() {
           </div>
           <div className="flex flex-wrap gap-4">
             {placeholderComments.map((c) => (
-              <div
-                key={c.id}
-                className="flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-2"
-              >
+              <div key={c.id} className="flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-2">
                 <div className="w-6 h-6 rounded-full bg-[#228EE5]/30 flex items-center justify-center text-[10px] font-semibold text-white">
                   {c.name[0].toUpperCase()}
                 </div>
@@ -236,14 +225,13 @@ export default function MovieDetailPage() {
         </section>
       </div>
 
-      {/* Suggestions */}
-      {movie.recommendations.length > 0 && (
+      {series.recommendations.length > 0 && (
         <PosterRow
-          heading={`Suggestion like "${movie.title}"`}
-          items={movie.recommendations}
+          heading={`Suggestion like "${series.title}"`}
+          items={series.recommendations}
           onAdd={(itemId) => console.log("Add to list:", itemId)}
           onSeeMore={() => {}}
-          linkBase="/movies"
+          linkBase="/series"
         />
       )}
 
