@@ -15,14 +15,13 @@ const FALLBACK = {
 const FALLBACK_THUMBS = ['/assets/1.png', '/assets/2.png', '/assets/3.png', '/assets/4.png'];
 
 function StarRow({ rating = 0 }) {
-  // rating comes in on TMDB's 0-10 scale; render as 5 stars, proportionally filled.
   const stars = rating / 2;
   return (
     <div className="flex items-center gap-1">
       {[0, 1, 2, 3, 4].map((i) => {
         const fill = Math.max(0, Math.min(1, stars - i)) * 100;
         return (
-          <div key={i} className="relative w-5 h-5">
+          <div key={i} className="relative w-4 h-4 md:w-5 md:h-5">
             <div
               className="absolute inset-0"
               style={{
@@ -56,14 +55,11 @@ function StarRow({ rating = 0 }) {
 }
 
 const Hero = () => {
-  // Pull 4 trending titles to drive the carousel — no assumption made about
-  // whether they're "popular", "top rated", etc.; trending/week is a good
-  // general-purpose "what's hot right now" feed for a movie site's hero.
   const { data: trending } = useTrending({ mediaType: 'movie', timeWindow: 'week' });
   const features = (trending || []).slice(0, 4);
   const hasData = features.length >= 4;
 
-  const [current, setCurrent] = useState(1); // default: 2nd title focused
+  const [current, setCurrent] = useState(1);
 
   useEffect(() => {
     if (!hasData) return;
@@ -73,12 +69,8 @@ const Hero = () => {
     return () => clearInterval(timer);
   }, [hasData, features.length]);
 
-  // Active title driving the background/title/description/rating.
   const active = hasData ? features[current] : FALLBACK;
 
-  // Rotate the 4 items so the "current" one always lands in the enlarged,
-  // focused slot (position 2) — the per-slot styling below never changes,
-  // only which image occupies each slot.
   const order = hasData
     ? [
         features[(current + features.length - 1) % features.length],
@@ -94,114 +86,97 @@ const Hero = () => {
   };
 
   return (
-    <section className="relative w-full min-h-screen flex flex-col items-start justify-center px-12 lg:px-24 overflow-visible">
-      {/* Background Image */}
+    <section className="relative w-full h-[624px] md:min-h-screen flex flex-col items-start justify-end md:justify-center px-4 md:px-12 lg:px-24 overflow-hidden md:overflow-visible">
       <div
-        className="absolute inset-0 z-0 bg-cover bg-center transition-[background-image] duration-700"
+        className="absolute w-[756px] h-[447px] left-[-241px] top-[-5px] md:inset-0 md:w-full md:h-full md:left-0 md:top-0 z-0 bg-cover bg-center transition-[background-image] duration-700"
         style={{ backgroundImage: `url('${active.backdropSrc || active.imageSrc}')` }}
       >
-               <div className="absolute inset-0 bg-gradient-to-r from-[var(--bg-page)] via-[var(--bg-page)]/10 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[var(--bg-page)] via-[var(--bg-page)]/20 md:via-[var(--bg-page)]/10 to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-page)] via-transparent to-transparent" />
       </div>
 
       <Navbar />
 
-      {/* Content Area */}
-      <div className="relative z-10 mt-80 w-[553px]">
-        {/* HEADING 1 (96pt from style guide) */}
-        <h1 className="tracking-tight mb-4 drop-shadow-2xl">
+      <div className="relative z-10 w-full md:w-[553px] mb-8 md:mb-0 md:mt-80 flex flex-col items-start">
+        
+        {/* Mobile Stacking Cards (Centered) */}
+        <div className="flex justify-center items-end mb-8 md:hidden w-full">
+          {order.map((item, idx) => {
+            const isMain = idx === 1;
+            return (
+              <div
+                key={idx}
+                onClick={() => idx !== 1 && goTo(idx - 1)}
+                className={`
+                  ${isMain ? 'w-[74px] h-[100px] z-40 scale-110 border-2 border-[#228EE5] shadow-[0_0_20px_rgba(34,142,229,0.4)]' : 'w-[52px] h-[72px] border border-[var(--border-subtle)]'}
+                  ${idx > 0 ? '-ml-4' : ''}
+                  ${idx === 0 ? 'z-10' : idx === 2 ? 'z-30' : 'z-20 opacity-60'}
+                  rounded-[12px] overflow-hidden transition-all cursor-pointer relative
+                `}
+              >
+                <img src={item.imageSrc} className="w-full h-full object-cover" alt="" />
+                {idx === 0 && <div className="absolute inset-0 bg-black/30" />}
+                {idx === 2 && <div className="absolute inset-0 bg-black/10" />}
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Heading */}
+        <h1 className="text-[48px] font-bold md:text-[96px] md:font-normal tracking-tight mb-2 md:mb-4 drop-shadow-2xl leading-[1.1] md:leading-normal">
           {active.title}
         </h1>
 
-        {/* PARAGRAPH (16pt Medium from style guide) */}
-        <p className="p-medium text-[var(--text-secondary)] max-w-xl mb-10 opacity-90 line-clamp-3">
+        {/* Paragraph */}
+        <p className="text-[12px] font-bold md:text-[16px] md:font-medium text-[var(--text-secondary)] max-w-xl mb-6 md:mb-10 opacity-90 line-clamp-3">
           {active.overview || FALLBACK.overview}
         </p>
 
-        <div className="flex items-center gap-6 mb-10">
-          {/* Stars Container */}
+        {/* Info Row */}
+        <div className="flex items-center gap-4 md:gap-6 mb-8 md:mb-10 scale-90 md:scale-100 origin-left">
           <StarRow rating={active.voteAverage} />
-
-          {/* IMDb Section */}
-          <div className="flex items-center gap-3">
-            <img
-              src="/assets/imdb.png"
-              alt="IMDb"
-              className="h-[20px] w-[37px] object-cover object-left"
-            />
-            <span className="text-[var(--text-primary)] text-[16px] font-medium leading-none">
+          <div className="flex items-center gap-2 md:gap-3">
+            <img src="/assets/imdb.png" alt="IMDb" className="h-[16px] md:h-[20px] w-auto object-contain" />
+            <span className="text-[var(--text-primary)] text-[14px] md:text-[16px] font-bold md:font-medium leading-none">
               {active.voteAverage ? active.voteAverage.toFixed(1) : FALLBACK.voteAverage}
             </span>
           </div>
-
-          {/* Netflix Logo */}
-          <img
-            src="/assets/netflix.png"
-            alt="Netflix"
-            className="object-contain w-[53.57] h-[14.03]"
-          />
+          <img src="/assets/netflix.png" alt="Netflix" className="object-contain w-[40px] md:w-[53.57px]" />
         </div>
 
         {/* Action Row */}
-        <div className="flex items-center gap-2">
-          <button className="bg-[#228EE5] hover:bg-blue-600 px-10 py-4 rounded-full font-[500] text-[16px] transition-all flex items-center gap-2 w-[168px] h-[40px] flex justify-center">
-            <img src='/assets/play.png' className='w-[16px] h-[16px]' alt="" /> <span style={{ whiteSpace: 'nowrap' }}> Whatch Movie</span>
+        <div className="flex items-center gap-3">
+          <button className="bg-[#228EE5] hover:bg-blue-600 rounded-full font-bold md:font-[500] text-[14px] md:text-[16px] transition-all flex items-center justify-center gap-2 w-[128px] h-[32px] md:w-[168px] md:h-[40px]">
+            <img src='/assets/play.png' className='w-3 h-3 md:w-[16px] md:h-[16px]' alt="" /> 
+            <span className="whitespace-nowrap">Watch Movie</span>
           </button>
-          <button className="border border-[var(--border-subtle)] text-[var(--text-primary)] hover:bg-[var(--bg-surface)] px-10 py-4 rounded-full font-[500] text-[16px] transition-all flex items-center gap-2 w-[128px] h-[40px]  flex justify-center">
-            <span style={{ whiteSpace: 'nowrap' }}>More Info</span> <span>→</span>
+          <button className="border border-[var(--border-subtle)] text-[var(--text-primary)] hover:bg-[var(--bg-surface)] rounded-full font-bold md:font-[500] text-[14px] md:text-[16px] transition-all flex items-center justify-center gap-2 w-[128px] h-[32px] md:w-[128px] md:h-[40px]">
+            <span className="whitespace-nowrap">More Info</span> <span>→</span>
           </button>
         </div>
       </div>
 
-      {/* Stacking Cards Container — exact original styling; images swap per slot */}
-      <div className="absolute bottom-8 right-12 z-20 flex items-end">
-
-        {/* Card 1 (Left) */}
-        <div
-          onClick={() => goTo(-1)}
-          className="w-[122px] h-[122px] rounded-[20px] overflow-hidden border border-[var(--border-subtle)] transition-all hover:scale-105 cursor-pointer relative z-10"
-        >
-          <img
-            src={order[0].imageSrc}
-            className="w-full h-full object-cover"
-            alt={order[0].title}
-          />
-          <div className="absolute inset-0 bg-black/30" /> {/* Slight dimming */}
-        </div>
-
-        {/* Card 2 (Main Focused Card) */}
-        <div className="w-[174px] h-[174px] rounded-[20px] overflow-hidden border-1 border-[#228EE5] shadow-[0_0_40px_rgba(34,142,229,0.4)] relative z-40 -ml-12 scale-105 transition-transform hover:scale-110 cursor-pointer">
-          <img
-            src={order[1].imageSrc}
-            className="w-full h-full object-cover"
-            alt={order[1].title}
-          />
-        </div>
-
-        {/* Card 3 (Overlapped) */}
-        <div
-          onClick={() => goTo(1)}
-         className="w-[122px] h-[122px] rounded-[20px] overflow-hidden border border-[var(--border-subtle)] relative z-30 -ml-10 transition-all hover:scale-105 cursor-pointer"
-        >
-          <img
-            src={order[2].imageSrc}
-            className="w-full h-full object-cover"
-            alt={order[2].title}
-          />
-          <div className="absolute inset-0 bg-black/10" />
-        </div>
-
-        {/* Card 4 (Far Right) */}
-        <div
-          onClick={() => goTo(2)}
-          className="w-[122px] h-[122px] rounded-[20px] overflow-hidden border border-[var(--border-subtle)] relative z-20 -ml-10 opacity-60 transition-all hover:opacity-100 hover:scale-105 cursor-pointer"
-        >
-          <img
-            src={order[3].imageSrc}
-            className="w-full h-full object-cover"
-            alt={order[3].title}
-          />
-        </div>
+      {/* Desktop Stacking Cards  */}
+       <div className="hidden md:flex absolute bottom-8 right-12 z-20 items-end">
+        {order.map((item, idx) => {
+          const isMain = idx === 1;
+          return (
+            <div
+              key={idx}
+              onClick={() => idx !== 1 && goTo(idx - 1)}
+              className={`
+                ${isMain ? 'w-[174px] h-[174px] z-40 scale-105 border-1 border-[#228EE5] shadow-[0_0_40px_rgba(34,142,229,0.4)] -ml-12' : 'w-[122px] h-[122px] border border-[var(--border-subtle)]'}
+                ${idx > 1 ? '-ml-10' : ''}
+                ${idx === 0 ? 'z-10' : idx === 2 ? 'z-30' : 'z-20 opacity-60'}
+                rounded-[20px] overflow-hidden transition-all cursor-pointer relative hover:scale-110
+              `}
+            >
+              <img src={item.imageSrc} className="w-full h-full object-cover" alt="" />
+              {idx === 0 && <div className="absolute inset-0 bg-black/30" />}
+              {idx === 2 && <div className="absolute inset-0 bg-black/10" />}
+            </div>
+          );
+        })}
       </div>
     </section>
   );
