@@ -2,15 +2,12 @@
 
 import React from "react";
 
-const footerLinksRow1 = [
+const allLinks = [
   { label: "Get the Omni App", href: "#" },
   { label: "Help", href: "#" },
   { label: "Site Index", href: "#" },
   { label: "Omni Pro", href: "#" },
   { label: "Advertising", href: "#" },
-];
-
-const footerLinksRow2 = [
   { label: "Omni Developer", href: "#" },
   { label: "Jobs", href: "#" },
   { label: "Privacy Policy", href: "#" },
@@ -41,42 +38,30 @@ const socialIcons = [
 
 export default function Footer() {
   return (
-    <footer className="relative w-full bg-[var(--bg-page)] pt-20 pb-16 px-6 font-sans overflow-hidden">
+    <footer className="relative w-full bg-[var(--bg-page)] pt-16 md:pt-20 pb-12 md:pb-16 px-6 font-sans overflow-hidden">
       {/* Background radial glow */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_-20%,_#1e293b_0%,_transparent_70%)] opacity-40 pointer-events-none" />
+      <div
+        className="absolute inset-0 pointer-events-none opacity-40"
+        style={{ background: "var(--bg-glow)" }}
+      />
 
       <div className="relative z-10 max-w-6xl mx-auto flex flex-col items-center">
-        {/* Navigation Links - Row 1 */}
-        <nav className="flex flex-wrap justify-center gap-x-10 gap-y-4 mb-5">
-          {footerLinksRow1.map((link) => (
+        {/* Navigation Links - Combined to wrap naturally on mobile like the screenshot */}
+        <nav className="flex flex-wrap justify-center items-center gap-x-6 md:gap-x-10 gap-y-6 md:gap-y-8 mb-12 md:mb-16 max-w-4xl">
+          {allLinks.map((link) => (
             <a
               key={link.label}
               href={link.href}
-              className="group flex items-center gap-1.5 text-[15px] font-medium text-[var(--text-primary)] hover:text-blue-400 transition-colors"
+              className="group flex items-center gap-1 md:gap-2 text-[14px] font-medium md:text-[24px] md:font-bold text-[var(--text-primary)] hover:text-blue-400 transition-colors whitespace-nowrap"
             >
               {link.label}
               <ChevronRightIcon />
             </a>
           ))}
         </nav>
-
-        {/* Navigation Links - Row 2 */}
-        <nav className="flex flex-wrap justify-center gap-x-10 gap-y-4 mb-12">
-          {footerLinksRow2.map((link) => (
-            <a
-              key={link.label}
-              href={link.href}
-              className="group flex items-center gap-1.5 text-[15px] font-medium text-[var(--text-primary)] hover:text-blue-400 transition-colors"
-            >
-              {link.label}
-              <ChevronRightIcon />
-            </a>
-          ))}
-        </nav>
-
         
-        {/* Social Icons */}
-        <div className="flex items-center justify-center gap-8">
+        {/* Social Icons - Scaling from 28px to 48px */}
+        <div className="flex items-center justify-center gap-4 md:gap-8">
           {socialIcons.map((icon) => (
             <a
               key={icon.label}
@@ -86,7 +71,7 @@ export default function Footer() {
             >
               <svg
                 viewBox="0 0 24 24"
-                className="h-8 w-8 fill-current"
+                className="w-[28px] h-[28px] md:w-[48px] md:h-[48px] fill-current"
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path d={icon.path} />
@@ -102,15 +87,13 @@ export default function Footer() {
 function ChevronRightIcon() {
   return (
     <svg
-      width="10"
-      height="10"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
       strokeWidth="3"
       strokeLinecap="round"
       strokeLinejoin="round"
-      className="text-[var(--text-primary)]/40 group-hover:text-blue-400"
+      className="w-3 h-3 md:w-5 md:h-5 text-[var(--text-primary)]/40 group-hover:text-blue-400 transition-colors"
     >
       <path d="m9 18 6-6-6-6" />
     </svg>

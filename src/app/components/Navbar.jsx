@@ -161,7 +161,7 @@ const Navbar = () => {
                                     <img src="/assets/user.png" className="w-5 h-5 object-contain opacity-70 group-hover:opacity-100 brightness-0 invert transition-all" alt="User" />
                                 </Link>
                                 <div className="absolute right-0 top-2 pt-2">
-                                    <Link href="/login" className="whitespace-nowrap rounded-full bg-[#E5228E] px-2 py-0.5 text-[10px] font-semibold text-white shadow-lg hover:bg-[#c91d7c]">
+                                    <Link href="/login" className="whitespace-nowrap rounded-full bg-[#E5228E] px-1 py-0.5 text-[9px] font-semibold text-white shadow-lg hover:bg-[#c91d7c]">
                                         Login
                                     </Link>
                                 </div>

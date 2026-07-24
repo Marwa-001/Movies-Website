@@ -123,7 +123,7 @@ const Hero = () => {
         </div>
 
         {/* Heading */}
-        <h1 className="text-[48px] font-bold md:text-[96px] md:font-normal tracking-tight mb-2 md:mb-4 drop-shadow-2xl leading-[1.1] md:leading-normal">
+        <h1 className="text-[48px] font-bold md:text-[96px] md:font-normal tracking-tight mb-2 md:mb-4 drop-shadow-2xl">
           {active.title}
         </h1>
 

@@ -25,6 +25,7 @@
     --text-primary: #ffffff;
     --text-secondary: #9ca3af;
     --icon-filter: brightness(0) invert(1); /* white icons on dark */
+     --bg-glow: radial-gradient(circle at 20% 50%, #1e1b4b 0%, transparent 50%);
   }
 
   html.light {
@@ -36,6 +37,7 @@
     --text-primary: #0a0c10;
     --text-secondary: #4b5563;
     --icon-filter: none; /* keep icons dark on light */
+    --bg-glow: transparent; 
   }
 
   body {

@@ -32,41 +32,41 @@ export default function FAQs() {
   };
 
   return (
-    <section id="faqs" className="relative w-full bg-[var(--bg-page)] py-24 px-6 overflow-hidden">
-      {/* Background Radial Glow to match the deep blue/purple vibe */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_50%,_#1e1b4b_0%,_transparent_50%)] opacity-40 pointer-events-none" />
+    <section id="faqs" className="relative w-full bg-[var(--bg-page)] py-12 md:py-24 px-6 overflow-hidden">
+      {/* Background Radial Glow */}
+      <div
+        className="absolute inset-0 pointer-events-none opacity-40"
+        style={{ background: "var(--bg-glow)" }}
+      />
 
       <div className="relative z-10 max-w-4xl mx-auto flex flex-col items-center">
         {/* Section Header */}
-        <h2 className="text-3xl md:text-[48px] font-[700] text-[var(--text-primary)] text-center mb-16 tracking-tight">
+        <h2 className="hidden md:block text-3xl md:text-[48px] font-[700] text-[var(--text-primary)] text-center mb-16 tracking-tight">
           The Omni Questions Everyone`s Asking
         </h2>
 
         {/* FAQ List */}
-        <div className="w-full space-y-4 mb-28">
+        <div className="w-full space-y-[10px] md:space-y-[36px] mb-14 md:mb-28">
           {faqData.map((item, index) => (
             <div
               key={index}
               className="relative group cursor-pointer"
               onClick={() => toggleFAQ(index)}
             >
-              {/* This div creates the thin magenta/purple gradient border effect */}
-              <div className="absolute -inset-[1px] bg-gradient-to-r from-purple-500/30 via-pink-500/20 to-purple-500/30 rounded-2xl opacity-100" />
-              
-              <div className="relative bg-[var(--bg-page)] rounded-2xl px-6 py-5 flex items-center justify-between border border-white/5 transition-all duration-300 group-hover:border-white/20">
-                <span className="text-lg font-medium text-[var(--text-primary)] tracking-wide">
+              <div className="relative border border-solid border-[#E93F9C] bg-[var(--bg-page)] rounded-[6px] md:rounded-[12px] px-4 py-1 md:px-6 md:py-5 flex items-center justify-between transition-all duration-300 group-hover:border-white/25">
+
+                <span className="text-[10px] md:text-lg font-medium text-[var(--text-primary)] tracking-wide">
                   {item.question}
                 </span>
-                <ChevronDown 
-                  className={`w-5 h-5 text-[var(--text-primary)]/70 transition-transform duration-300 ${
-                    openIndex === index ? 'rotate-180' : ''
-                  }`} 
+
+                <ChevronDown
+                  className={`w-4 h-4 md:w-5 md:h-5 text-[var(--text-primary)]/70 transition-transform duration-300 flex-shrink-0 ${openIndex === index ? 'rotate-180' : ''
+                    }`}
                 />
               </div>
 
-              {/* Answer content (Optional: can be animated with Framer Motion if you have it) */}
               {openIndex === index && (
-                <div className="relative px-6 py-4 text-[var(--text-primary)]/60 text-sm leading-relaxed bg-[var(--bg-page)] rounded-b-2xl -mt-2 border-x border-b border-white/5">
+                <div className="relative px-4 py-3 md:px-6 md:py-4 text-[var(--text-primary)]/60 text-[10px] md:text-sm leading-relaxed bg-[var(--bg-page)] rounded-b-[12px] -mt-2 border-x border-b border-[#E93F9C]/40">
                   {item.answer}
                 </div>
               )}
@@ -76,21 +76,21 @@ export default function FAQs() {
 
         {/* Studios Title */}
         <div className="flex flex-col items-center mb-10 w-full">
-            <h3 className="text-[48px] font-[700] text-[var(--text-primary)] mb-6">Studios</h3>
+            <h3 className="text-[20px] md:text-[48px] font-[500] md:font-[700] text-[var(--text-primary)] mb:3 md:mb-6">Studios</h3>
             
         </div>
 
         {/* Studios Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-5 w-full max-w-5xl">
+        <div className="grid grid-cols-5 gap-2 sm:gap-5 w-full max-w-5xl justify-items-center">
           {studios.map((num) => (
             <div
               key={num}
-              className="aspect-square bg-[#f8fafc] rounded-[40px] flex items-center justify-center p-7 shadow-lg hover:scale-105 transition-all duration-300 h-[160px] w-[160px]"
+              className="aspect-square bg-[#f8fafc] rounded-xl md:rounded-[40px] flex items-center justify-center p-2 md:p-7 shadow-lg hover:scale-105 transition-all duration-300 w-[46px] h-[46px] md:w-[160px] md:h-[160px]"
             >
               <img
                 src={`/assets/studios/${num}.png`}
                 alt={`Studio Logo ${num}`}
-                className="w-full h-full object-contain brightness-0" 
+                className="w-full h-full object-contain brightness-0"
               />
             </div>
           ))}
