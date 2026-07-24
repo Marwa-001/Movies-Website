@@ -30,9 +30,9 @@ export default function SeriesPage() {
 
   return (
     <>
-      <div className="relative pt-40 pb-8 px-12 lg:px-24 bg-[var(--bg-page)] text-[var(--text-primary)]">
+      <div className="relative pt-28 md:pt-40 pb-8 px-4 md:px-12 lg:px-24 bg-[var(--bg-page)] text-[var(--text-primary)] min-h-screen">
         <Navbar />
-        <h1 className="text-5xl font-bold tracking-tight text-white mb-10">Series</h1>
+        <h1 className="text-3xl md:text-5xl font-bold tracking-tight text-[var(--text-primary)] mb-6 md:mb-10">Series</h1>
 
         <AdvanceSearchBar
           genres={genreList}

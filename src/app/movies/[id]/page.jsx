@@ -66,16 +66,16 @@ export default function MovieDetailPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#050514]">
-        <p className="text-white/50">Loading...</p>
+      <div className="min-h-screen flex items-center justify-center bg-[var(--bg-page)]">
+        <p className="text-[var(--text-secondary)]">Loading...</p>
       </div>
     );
   }
 
   if (isError || !movie) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#050514]">
-        <p className="text-white/50">Couldn&apos;t load this title. It may not exist.</p>
+      <div className="min-h-screen flex items-center justify-center bg-[var(--bg-page)]">
+        <p className="text-[var(--text-secondary)]">Couldn&apos;t load this title. It may not exist.</p>
       </div>
     );
   }
@@ -83,10 +83,10 @@ export default function MovieDetailPage() {
   return (
     <>
       {/* Backdrop hero */}
-      <section className="relative pt-40 pb-8 px-12 lg:px-24 bg-[var(--bg-page)] text-[var(--text-primary)]">
+      <section className="relative pt-28 md:pt-40 pb-8 px-6 md:px-12 lg:px-24 bg-[var(--bg-page)] text-[var(--text-primary)]">
         <div className="absolute inset-0 z-0 bg-cover bg-center" style={{ backgroundImage: `url('${movie.backdropUrl}')` }}>
-          <div className="absolute inset-0 bg-gradient-to-r from-[#05070a] via-[#05070a]/40 to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#05070a] via-[#05070a]/20 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[var(--bg-page)] via-[var(--bg-page)]/20 md:via-[var(--bg-page)]/10 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-page)] via-transparent to-transparent" />
         </div>
 
         <Navbar />
@@ -116,7 +116,7 @@ export default function MovieDetailPage() {
             <StarRating rating={movie.voteAverage} />
             <div className="flex items-center gap-3">
               <img src="/assets/imdb.png" alt="IMDb" className="h-[20px] w-[37px] object-cover object-left" />
-              <span className="text-white text-[16px] font-medium leading-none">{movie.voteAverage.toFixed(1)}</span>
+              <span className="text-[var(--text-secondary)] text-[16px] font-medium leading-none">{movie.voteAverage.toFixed(1)}</span>
             </div>
           </div>
 
@@ -144,7 +144,7 @@ export default function MovieDetailPage() {
 
       {/* Gallery */}
       {movie.gallery.length > 0 && (
-        <div className="px-12 lg:px-24 -mt-8 relative z-10">
+        <div className="px-6 md:px-12 lg:px-24 -mt-8 relative z-10">
           <div className="no-scrollbar flex gap-4 overflow-x-auto pb-2">
             {movie.gallery.map((src, i) => (
               <div key={i} className="relative w-40 h-24 flex-shrink-0 rounded-xl overflow-hidden border border-white/10">
@@ -155,11 +155,11 @@ export default function MovieDetailPage() {
         </div>
       )}
 
-      <div className="px-12 lg:px-24 py-16 space-y-16">
+      <div className="px-6 md:px-12 lg:px-24 py-10 md:py-16 space-y-10 md:space-y-16">
         {/* About */}
         {movie.overview && (
           <section>
-            <h3 className="text-2xl font-bold text-white mb-4">about {movie.title}</h3>
+            <h3 className="text-2xl font-bold text-[var(--text-primary)] mb-4">about {movie.title}</h3>
             <p className="text-gray-300 leading-relaxed max-w-4xl">{movie.overview}</p>
           </section>
         )}
@@ -167,10 +167,10 @@ export default function MovieDetailPage() {
         {/* Genres */}
         {movie.genres.length > 0 && (
           <section>
-            <h3 className="text-2xl font-bold text-white mb-4">Genres</h3>
+            <h3 className="text-2xl font-bold text-[var(--text-primary)] mb-4">Genres</h3>
             <div className="flex flex-wrap gap-3">
               {movie.genres.map((g) => (
-                <span key={g} className="rounded-full px-5 py-2 text-sm font-medium bg-[#E5228E] text-white">
+                <span key={g} className="rounded-full px-5 py-2 text-sm font-medium bg-[#E5228E] text-[var(--text-primary)]">
                   {g}
                 </span>
               ))}
@@ -181,7 +181,7 @@ export default function MovieDetailPage() {
         {/* Characters */}
         {movie.cast.length > 0 && (
           <section>
-            <h3 className="text-2xl font-bold text-white mb-4">Characters</h3>
+            <h3 className="text-2xl font-bold text-[var(--text-primary)] mb-4">Characters</h3>
             <div className="flex flex-wrap gap-6">
               {movie.cast.map((c) => (
                 <div key={c.id} className="w-16 text-center">
@@ -200,7 +200,7 @@ export default function MovieDetailPage() {
         {/* Director */}
         {movie.director && (
           <section>
-            <h3 className="text-2xl font-bold text-white mb-4">Director</h3>
+            <h3 className="text-2xl font-bold text-[var(--text-primary)] mb-4">Director</h3>
             <div className="w-16 text-center">
               <div className="relative w-16 h-16 rounded-full overflow-hidden border border-white/10 bg-white/5 mx-auto">
                 <Image src={movie.director.photoUrl || null} alt={movie.director.name} fill sizes="64px" className="object-cover" />
@@ -215,7 +215,7 @@ export default function MovieDetailPage() {
         {/* Comments (static placeholder — no comments backend yet) */}
         <section>
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-2xl font-bold text-white">Comments</h3>
+            <h3 className="text-2xl font-bold text-[var(--text-primary)]">Comments</h3>
             <button type="button" className="text-sm font-semibold text-[#228EE5] hover:text-blue-400">
               See More
             </button>
@@ -226,7 +226,7 @@ export default function MovieDetailPage() {
                 key={c.id}
                 className="flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-2"
               >
-                <div className="w-6 h-6 rounded-full bg-[#228EE5]/30 flex items-center justify-center text-[10px] font-semibold text-white">
+                <div className="w-6 h-6 rounded-full bg-[#228EE5]/30 flex items-center justify-center text-[10px] font-semibold text-[var(--text-primary)]">
                   {c.name[0].toUpperCase()}
                 </div>
                 <span className="text-xs text-gray-300">{c.name}</span>
