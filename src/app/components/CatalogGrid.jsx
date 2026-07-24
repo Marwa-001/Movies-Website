@@ -8,7 +8,7 @@ export default function CatalogGrid({ items, onAdd, linkBase }) {
   }
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-x-6 gap-y-10 justify-items-center">
+    <div className="grid grid-cols-3 lg:grid-cols-5 gap-x-6 gap-y-10 justify-items-center">
       {items.map((item, index) => (
         <MovieCard
           key={item.id}

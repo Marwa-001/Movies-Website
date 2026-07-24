@@ -18,19 +18,26 @@ export default function MovieCard({ id, title, imageSrc, onAdd, priority = false
     return () => window.removeEventListener('resize', check);
   }, []);
 
-  const cardW = isMobile ? 150 : 208;
-  const cardH = isMobile ? 214 : 296;
-  const btnS = isMobile ? 28 : 56; 
+  // const cardW = isMobile ? 150 : 208;
+  // const cardH = isMobile ? 214 : 296;
+  // const btnS = isMobile ? 28 : 56; 
+  const btnS = isMobile ? 24 : 56;    // Reduced from 28 to look better on 112px
   const gap = isMobile ? 4 : 8;
   const cutout = btnS + gap;
-  const outerR = isMobile ? 12 : 16;
-  const btnR = isMobile ? 6 : 12; 
-  const innerR = isMobile ? 6 : 12;
+  // const outerR = isMobile ? 12 : 16;
+  // const btnR = isMobile ? 6 : 12; 
+  // const innerR = isMobile ? 6 : 12;
+
+  const cardW = isMobile ? 112 : 208; // Was 150
+const cardH = isMobile ? 160 : 296; // Was 214
+const outerR = isMobile ? 8 : 16;   // Reduced from 12 for a tighter look
+const btnR = isMobile ? 6 : 12; 
+const innerR = isMobile ? 6 : 12;
 
   return (
     <Wrapper
       {...wrapperProps}
-      className="group relative w-[150px] h-[214px] md:w-[208px] md:h-[296px] flex-shrink-0 bg-[var(--bg-page)] rounded-[12px] md:rounded-[16px] cursor-pointer block"
+       className="group relative w-[112px] h-[160px] md:w-[208px] md:h-[296px] flex-shrink-0 bg-[var(--bg-page)] rounded-[8px] md:rounded-[16px] cursor-pointer block"
     >
       <svg width="0" height="0" className="absolute" viewBox={`0 0 ${cardW} ${cardH}`}>
         <defs>
@@ -70,17 +77,17 @@ export default function MovieCard({ id, title, imageSrc, onAdd, priority = false
       </svg>
 
       <div className="absolute inset-0 w-full h-full overflow-hidden" style={{ clipPath: `url(#${maskId})` }}>
-        <Image src={imageSrc || null} alt={title} fill priority={priority} sizes="(max-width: 768px) 150px, 208px" className="object-cover transition-transform duration-500 ease-out group-hover:scale-105" />
+        <Image src={imageSrc || null} alt={title} fill priority={priority}  sizes="(max-width: 768px) 112px, 208px"  className="object-cover transition-transform duration-500 ease-out group-hover:scale-105" />
       </div>
       
       <button
         type="button"
         onClick={(e) => { e.preventDefault(); e.stopPropagation(); onAdd?.(id); }}
-        className="absolute left-0 top-0 z-30 flex h-[28px] w-[28px] md:h-[56px] md:w-[56px] items-center justify-center 
+        className="absolute left-0 top-0 z-30 flex h-[24px] w-[24px] md:h-[56px] md:w-[56px] items-center justify-center 
                    rounded-[6px] md:rounded-[12px] border border-white/10
                    bg-gradient-to-b from-black/50 to-black/20 backdrop-blur-[5px] transition-all"
       >
-        <Plus className="h-4 w-4 md:h-8 md:w-8 text-white" strokeWidth={3} />
+        <Plus className="h-3 w-3 md:h-8 md:w-8 text-white" strokeWidth={3} />
       </button>
 
       <div className="absolute bottom-3 md:bottom-4 left-0 right-0 text-center px-2 pointer-events-none">
