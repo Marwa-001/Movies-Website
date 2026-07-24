@@ -158,8 +158,7 @@ export async function getMovieDetails(id) {
  */
 export async function getThematicCollection(type, mediaType = "movie") {
   const params = { page: 1, sort_by: "popularity.desc" };
-  
-  // Mapping keys to TMDB IDs
+
   const config = {
     musicals: { with_genres: "10402" },
     marvel: { with_companies: "420" },
@@ -168,21 +167,21 @@ export async function getThematicCollection(type, mediaType = "movie") {
     godzilla: { with_keywords: "156485" },
     starwars: { with_keywords: "161181" },
     horror: { with_genres: "27" },
-    action: { with_genres: "28" }
+    action: { with_genres: "28" },
   };
 
   const cleanKey = type.toLowerCase().replace(/\s+/g, "");
   const queryParams = config[cleanKey] || {};
-  
-  // Dynamically switch between /discover/movie and /discover/tv
   const endpoint = mediaType === "series" || mediaType === "tv" ? "/discover/tv" : "/discover/movie";
-  
+
   const data = await tmdbFetch(endpoint, { ...params, ...queryParams });
-  
+  const results = data.results || [];
+
   return {
     title: type,
-    // Representative image from the top result
-    imageSrc: getTmdbImageUrl(data.results[0]?.poster_path, "w500"),
+    imageSrc: getTmdbImageUrl(results[0]?.poster_path, "w500"),
+    // Top 3 posters for the stacked-card cycling effect
+    images: results.slice(0, 3).map((r) => getTmdbImageUrl(r.poster_path, "w500")).filter(Boolean),
   };
 }
 

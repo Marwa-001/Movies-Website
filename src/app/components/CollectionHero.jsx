@@ -4,66 +4,85 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 
 export default function CollectionHero({ collections }) {
-  const [current, setCurrent] = useState(0);
+  const [current, setCurrent] = useState(1);
 
-  // Auto-cycle every 5 seconds (matching Hero)
+  const hasData = collections && collections.length >= 4;
+
   useEffect(() => {
-    if (!collections || collections.length < 2) return;
+    if (!hasData) return;
     const timer = setInterval(() => {
       setCurrent((prev) => (prev + 1) % collections.length);
     }, 5000);
     return () => clearInterval(timer);
-  }, [collections?.length]);
+  }, [hasData, collections?.length]);
 
-  // Safety checks
   if (!collections || collections.length === 0) {
-    return <div className="h-[500px] w-full bg-[#05070a] animate-pulse rounded-[32px] mb-12" />;
+    return <div className="h-[500px] w-full bg-[var(--bg-page)] animate-pulse rounded-[32px] mb-12" />;
   }
 
-  const active = collections[current];
+  const active = hasData ? collections[current] : collections[0];
 
-  // Logic to determine which images show in which overlapping slot
-  // This matches your Hero component's logic perfectly
-  const order = [
-    collections[(current + collections.length - 1) % collections.length], // Slot 1 (Left)
-    collections[current],                                               // Slot 2 (Focused)
-    collections[(current + 1) % collections.length],                   // Slot 3 (Right 1)
-    collections[(current + 2) % collections.length],                   // Slot 4 (Right 2)
-  ];
+  const order = hasData
+    ? [
+        collections[(current + collections.length - 1) % collections.length],
+        collections[current],
+        collections[(current + 1) % collections.length],
+        collections[(current + 2) % collections.length],
+      ]
+    : [collections[0], collections[0], collections[0], collections[0]];
 
   const goTo = (offset) => {
+    if (!hasData) return;
     setCurrent((prev) => (prev + offset + collections.length) % collections.length);
   };
 
   return (
-    <section className="relative w-full h-[600px] rounded-[32px] overflow-hidden mb-12 flex flex-col justify-center px-12 lg:px-24">
-      
-      {/* Background Image with Hero Gradients */}
-      <div className="absolute inset-0 z-0">
-        <Image
-          src={active.imageSrc || null} // Passing null fixes the console error
-          alt={active.title || "Collection"}
-          fill
-          className="object-cover object-top transition-opacity duration-1000"
-          priority
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#05070a] via-[#05070a]/40 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#05070a] via-transparent to-transparent" />
+    <section className="relative w-full h-[624px] md:h-[600px] flex flex-col items-start justify-end md:justify-center px-4 md:px-12 lg:px-24 overflow-hidden mb-12 rounded-none md:rounded-[32px]">
+      <div
+        className="absolute inset-0 w-full h-full z-0 bg-cover bg-center object-top transition-[background-image] duration-700"
+        style={{ backgroundImage: `url('${active.backdropSrc || active.imageSrc}')` }}
+      >
+        <div className="absolute inset-0 bg-gradient-to-r from-[var(--bg-page)] via-[var(--bg-page)]/20 md:via-[var(--bg-page)]/10 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-page)] via-transparent to-transparent" />
       </div>
 
-      {/* Content Area */}
-      <div className="relative z-10 w-full max-w-xl">
-        <h1 className="text-white text-5xl md:text-6xl font-bold tracking-tight mb-4 drop-shadow-2xl">
+      <div className="relative z-10 w-full md:w-[553px] mb-8 md:mb-0 flex flex-col items-start">
+
+        {/* Mobile Stacking Cards (Centered) */}
+        <div className="flex justify-center items-end mb-8 md:hidden w-full">
+          {order.map((item, idx) => {
+            const isMain = idx === 1;
+            return (
+              <div
+                key={idx}
+                onClick={() => idx !== 1 && goTo(idx - 1)}
+                className={`
+                  ${isMain ? 'w-[74px] h-[100px] z-40 scale-110 border-2 border-[#228EE5] shadow-[0_0_20px_rgba(34,142,229,0.4)]' : 'w-[52px] h-[72px] border border-[var(--border-subtle)]'}
+                  ${idx > 0 ? '-ml-4' : ''}
+                  ${idx === 0 ? 'z-10' : idx === 2 ? 'z-30' : 'z-20 opacity-60'}
+                  rounded-[12px] overflow-hidden transition-all cursor-pointer relative
+                `}
+              >
+                <img src={item.imageSrc} className="w-full h-full object-cover" alt="" />
+                {idx === 0 && <div className="absolute inset-0 bg-black/30" />}
+                {idx === 2 && <div className="absolute inset-0 bg-black/10" />}
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Heading */}
+        <h1 className="text-[48px] font-bold md:text-[96px] md:font-normal tracking-tight mb-2 md:mb-4 drop-shadow-2xl">
           {active.title} Collection
         </h1>
 
-        <p className="text-gray-300 text-lg mb-8 opacity-90 line-clamp-3 leading-relaxed">
-          Experience the complete cinematic journey of {active.title}. From the origins to the 
-          epic conclusion, witness the story that defined a generation.
+        {/* Paragraph */}
+        <p className="text-[12px] font-bold md:text-[16px] md:font-medium text-[var(--text-secondary)] max-w-xl mb-6 md:mb-10 opacity-90 line-clamp-3">
+          Experience the complete cinematic journey of {active.title}. From the origins to the epic conclusion, witness the story that defined a generation.
         </p>
 
-        {/* Rating Row */}
-        <div className="flex items-center gap-6 mb-10">
+        {/* Info Row */}
+        <div className="flex items-center gap-4 md:gap-6 mb-8 md:mb-10 scale-90 md:scale-100 origin-left">
           <div className="flex items-center gap-1">
             {[1, 2, 3, 4, 5].map((star) => (
               <div
@@ -74,73 +93,53 @@ export default function CollectionHero({ collections }) {
                   maskImage: 'url(/assets/star.png)',
                   WebkitMaskSize: 'contain',
                   maskSize: 'contain',
+                  WebkitMaskRepeat: 'no-repeat',
+                  maskRepeat: 'no-repeat',
                   width: 18,
-                  height: 18
+                  height: 18,
                 }}
               />
             ))}
           </div>
-          <div className="flex items-center gap-3">
-            <span className="px-2 py-0.5 bg-white/10 rounded text-[10px] text-white font-bold border border-white/10">4K ULTRA HD</span>
-          </div>
+          <span className="px-2 py-0.5 bg-white/10 rounded text-[10px] text-[var(--text-primary)] font-bold border border-white/10">
+            4K ULTRA HD
+          </span>
         </div>
 
         {/* Action Row */}
-        <div className="flex items-center gap-4">
-          <button className="bg-[#228EE5] hover:bg-blue-600 text-white rounded-full font-[500] text-[15px] transition-all flex items-center justify-center gap-2 w-[168px] h-[44px]">
-            <img src='/assets/play.png' className='w-[14px] h-[14px]' alt="" /> 
+        <div className="flex items-center gap-3">
+          <button className="bg-[#228EE5] hover:bg-blue-600 rounded-full font-bold md:font-[500] text-[14px] md:text-[16px] transition-all flex items-center justify-center gap-2 w-[128px] h-[32px] md:w-[168px] md:h-[40px]">
+            <img src='/assets/play.png' className='w-3 h-3 md:w-[16px] md:h-[16px]' alt="" />
             <span className="whitespace-nowrap">Watch Collection</span>
           </button>
-          <button className="border border-white/40 hover:bg-white/10 text-white rounded-full font-[500] text-[15px] transition-all flex items-center justify-center gap-2 w-[128px] h-[44px]">
-            <span className="whitespace-nowrap">More Info</span> 
-            <span className="text-lg">→</span>
+          <button className="border border-[var(--border-subtle)] text-[var(--text-primary)] hover:bg-[var(--bg-surface)] rounded-full font-bold md:font-[500] text-[14px] md:text-[16px] transition-all flex items-center justify-center gap-2 w-[128px] h-[32px] md:w-[128px] md:h-[40px]">
+            <span className="whitespace-nowrap">More Info</span> <span>→</span>
           </button>
         </div>
       </div>
 
-      {/* STACKED CARDS CONTAINER — Exact styling from Hero */}
-      <div className="absolute bottom-8 right-12 z-20 flex items-end">
-        
-        {/* Card 1 (Left - Small) */}
-        <div
-          onClick={() => goTo(-1)}
-          className="w-[122px] h-[122px] rounded-[20px] overflow-hidden border border-white/10 transition-all hover:scale-105 cursor-pointer relative z-10"
-        >
-          {order[0]?.imageSrc && (
-            <Image src={order[0].imageSrc} fill className="object-cover" alt="" />
-          )}
-          <div className="absolute inset-0 bg-black/50" />
-        </div>
-
-        {/* Card 2 (Main Focused Card) */}
-        <div className="w-[174px] h-[174px] rounded-[20px] overflow-hidden border border-[#228EE5] shadow-[0_0_40px_rgba(34,142,229,0.4)] relative z-40 -ml-12 scale-105 transition-transform hover:scale-110 cursor-pointer">
-          {order[1]?.imageSrc && (
-            <Image src={order[1].imageSrc} fill className="object-cover" alt="" />
-          )}
-        </div>
-
-        {/* Card 3 (Overlapped) */}
-        <div
-          onClick={() => goTo(1)}
-          className="w-[122px] h-[122px] rounded-[20px] overflow-hidden border border-white/10 relative z-30 -ml-10 transition-all hover:scale-105 cursor-pointer"
-        >
-          {order[2]?.imageSrc && (
-            <Image src={order[2].imageSrc} fill className="object-cover" alt="" />
-          )}
-          <div className="absolute inset-0 bg-black/10" />
-        </div>
-
-        {/* Card 4 (Far Right) */}
-        <div
-          onClick={() => goTo(2)}
-          className="w-[122px] h-[122px] rounded-[20px] overflow-hidden border border-white/10 relative z-20 -ml-10 opacity-60 transition-all hover:opacity-100 hover:scale-105 cursor-pointer"
-        >
-          {order[3]?.imageSrc && (
-            <Image src={order[3].imageSrc} fill className="object-cover" alt="" />
-          )}
-        </div>
+      {/* Desktop Stacking Cards */}
+      <div className="hidden md:flex absolute bottom-8 right-12 z-20 items-end">
+        {order.map((item, idx) => {
+          const isMain = idx === 1;
+          return (
+            <div
+              key={idx}
+              onClick={() => idx !== 1 && goTo(idx - 1)}
+              className={`
+                ${isMain ? 'w-[174px] h-[174px] z-40 scale-105 border-1 border-[#228EE5] shadow-[0_0_40px_rgba(34,142,229,0.4)] -ml-12' : 'w-[122px] h-[122px] border border-[var(--border-subtle)]'}
+                ${idx > 1 ? '-ml-10' : ''}
+                ${idx === 0 ? 'z-10' : idx === 2 ? 'z-30' : 'z-20 opacity-60'}
+                rounded-[20px] overflow-hidden transition-all cursor-pointer relative hover:scale-110
+              `}
+            >
+              <img src={item.imageSrc} className="w-full h-full object-cover" alt="" />
+              {idx === 0 && <div className="absolute inset-0 bg-black/30" />}
+              {idx === 2 && <div className="absolute inset-0 bg-black/10" />}
+            </div>
+          );
+        })}
       </div>
-
     </section>
   );
 }

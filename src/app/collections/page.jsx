@@ -5,6 +5,7 @@ import CollectionHero from "../components/CollectionHero";
 import Footer from "../components/Footer";
 import Link from "next/link";
 import Image from "next/image";
+import StackedCollectionCard from "../components/StackedCollectionCard";
 
 export const dynamic = "force-dynamic";
 
@@ -22,62 +23,64 @@ export default async function CollectionsPage() {
         <div className="max-w-7xl mx-auto lg:px-12 px-6">
           
           {/* 2. GRID HEADER */}
-          <div className="flex justify-between items-center mb-16">
-            <h2 className="text-3xl font-bold text-white tracking-tight">Collections</h2>
+          {/* 2. GRID HEADER */}
+{/* PERMANENTLY STACKED GRID — visible at all breakpoints */}
+<div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-y-10 gap-x-6 md:gap-y-20 md:gap-x-20 justify-items-center">
+  {data.map((cat, idx) => (
+    <Link href={`/collections/${slugifyTheme(cat.title)}`} key={idx} className="block">
+      <div className="md:hidden">
+        <StackedCollectionCard title={cat.title} images={cat.images} imageSrc={cat.imageSrc} size="mobile" />
+      </div>
+      <div className="hidden md:block">
+        <StackedCollectionCard title={cat.title} images={cat.images} imageSrc={cat.imageSrc} />
+      </div>
+    </Link>
+  ))}
+</div>
 
-            {/* Toggle Switch */}
-            <div className="flex bg-black/40 border border-white/10 rounded-full p-1 w-[120px] relative h-9">
-              <button className="flex-1 text-[10px] uppercase tracking-wider font-bold text-gray-500 z-10">Series</button>
-              <button className="flex-1 text-[10px] uppercase tracking-wider font-bold text-white z-10">Movies</button>
-              <div className="absolute top-1 bottom-1 right-1 w-[56px] bg-[#228EE5] rounded-full shadow-[0_0_15px_rgba(34,142,229,0.6)]" />
-            </div>
+{/* 3a. MOBILE: simple 2-col grid, no stacked layers */}
+<div className="grid grid-cols-2 gap-4 md:hidden mb-4">
+  {data.map((cat, idx) => (
+    <Link href={`/collections/${slugifyTheme(cat.title)}`} key={idx} className="block">
+      <div className="relative w-full aspect-[2/3] rounded-[14px] overflow-hidden border border-white/10 shadow-lg">
+        {cat.imageSrc ? (
+          <Image src={cat.imageSrc} alt={cat.title} fill sizes="50vw" className="object-cover" />
+        ) : (
+          <div className="w-full h-full bg-[#1a1f2e] animate-pulse" />
+        )}
+        <div className="absolute inset-0 bg-black/40 flex items-center justify-center p-3">
+          <h3 className="text-white text-[16px] font-bold text-center leading-tight tracking-tight drop-shadow-lg">
+            {cat.title}
+          </h3>
+        </div>
+      </div>
+    </Link>
+  ))}
+</div>
+
+{/* 3b. DESKTOP: permanently stacked 3-layer grid */}
+<div className="hidden md:grid grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-y-20 gap-x-20 justify-items-center">
+  {data.map((cat, idx) => (
+    <Link href={`/collections/${slugifyTheme(cat.title)}`} key={idx} className="block group">
+      <div className="relative w-[236px] h-[324px] transition-transform duration-300 group-hover:-translate-y-2">
+        <div className="absolute bottom-0 right-0 w-[208px] h-[296px] bg-white/5 rounded-[12px] border border-white/5 z-0" />
+        <div className="absolute top-[14px] right-[14px] w-[208px] h-[296px] bg-white/10 rounded-[12px] border border-white/5 z-10" />
+        <div className="absolute top-0 left-0 w-[208px] h-[296px] rounded-[12px] overflow-hidden shadow-2xl border border-white/10 z-20">
+          {cat.imageSrc ? (
+            <Image src={cat.imageSrc} alt={cat.title} fill sizes="208px" className="object-cover transition-transform duration-700 group-hover:scale-110" />
+          ) : (
+            <div className="w-full h-full bg-[#1a1f2e] animate-pulse" />
+          )}
+          <div className="absolute inset-0 bg-black/40 flex items-center justify-center p-4">
+            <h3 className="text-white text-[26px] font-bold text-center leading-tight tracking-tight drop-shadow-lg">
+              {cat.title}
+            </h3>
           </div>
-
-          {/* 3. PERMANENTLY STACKED GRID */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-y-20 gap-x-20 justify-items-center">
-            {data.map((cat, idx) => (
-              <Link 
-                href={`/collections/${slugifyTheme(cat.title)}`} 
-                key={idx} 
-                className="block group"
-              >
-                {/* 
-                   Bounding Box: 236x324 
-                   This allows all three layers to be visible simultaneously.
-                */}
-                <div className="relative w-[236px] h-[324px] transition-transform duration-300 group-hover:-translate-y-2">
-                  
-                  {/* Layer 3: Back Layer (Permanently Visible) */}
-                  <div className="absolute bottom-0 right-0 w-[208px] h-[296px] bg-white/5 rounded-[12px] border border-white/5 z-0" />
-
-                  {/* Layer 2: Middle Layer (Permanently Visible) */}
-                  <div className="absolute top-[14px] right-[14px] w-[208px] h-[296px] bg-white/10 rounded-[12px] border border-white/5 z-10" />
-
-                  {/* Layer 1: Front Poster */}
-                  <div className="absolute top-0 left-0 w-[208px] h-[296px] rounded-[12px] overflow-hidden shadow-2xl border border-white/10 z-20">
-                    {cat.imageSrc ? (
-                      <Image
-                        src={cat.imageSrc}
-                        alt={cat.title}
-                        fill
-                        sizes="208px"
-                        className="object-cover transition-transform duration-700 group-hover:scale-110"
-                      />
-                    ) : (
-                      <div className="w-full h-full bg-[#1a1f2e] animate-pulse" />
-                    )}
-
-                    {/* Cinematic Overlay & Title */}
-                    <div className="absolute inset-0 bg-black/40 flex items-center justify-center p-4">
-                      <h3 className="text-white text-[26px] font-bold text-center leading-tight tracking-tight drop-shadow-lg">
-                        {cat.title}
-                      </h3>
-                    </div>
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
+        </div>
+      </div>
+    </Link>
+  ))}
+</div>
         </div>
       </main>
       <Footer />
