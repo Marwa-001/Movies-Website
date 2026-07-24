@@ -88,9 +88,9 @@ const Hero = () => {
   return (
     <section className="relative w-full h-[624px] md:min-h-screen flex flex-col items-start justify-end md:justify-center px-4 md:px-12 lg:px-24 overflow-hidden md:overflow-visible">
       <div
-        className="absolute w-[756px] h-[447px] left-[-241px] top-[-5px] md:inset-0 md:w-full md:h-full md:left-0 md:top-0 z-0 bg-cover bg-center transition-[background-image] duration-700"
-        style={{ backgroundImage: `url('${active.backdropSrc || active.imageSrc}')` }}
-      >
+  className="absolute inset-0 w-full h-full z-0 bg-cover bg-center transition-[background-image] duration-700"
+  style={{ backgroundImage: `url('${active.backdropSrc || active.imageSrc}')` }}
+>
         <div className="absolute inset-0 bg-gradient-to-r from-[var(--bg-page)] via-[var(--bg-page)]/20 md:via-[var(--bg-page)]/10 to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-page)] via-transparent to-transparent" />
       </div>

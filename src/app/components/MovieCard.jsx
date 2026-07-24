@@ -30,7 +30,7 @@ export default function MovieCard({ id, title, imageSrc, onAdd, priority = false
   return (
     <Wrapper
       {...wrapperProps}
-      className="group relative w-[150px] h-[214px] md:w-[208px] md:h-[296px] flex-shrink-0 bg-[#020617] rounded-[12px] md:rounded-[16px] cursor-pointer block"
+      className="group relative w-[150px] h-[214px] md:w-[208px] md:h-[296px] flex-shrink-0 bg-[var(--bg-page)] rounded-[12px] md:rounded-[16px] cursor-pointer block"
     >
       <svg width="0" height="0" className="absolute" viewBox={`0 0 ${cardW} ${cardH}`}>
         <defs>
@@ -70,7 +70,7 @@ export default function MovieCard({ id, title, imageSrc, onAdd, priority = false
       </svg>
 
       <div className="absolute inset-0 w-full h-full overflow-hidden" style={{ clipPath: `url(#${maskId})` }}>
-        <Image src={imageSrc} alt={title} fill priority={priority} sizes="(max-width: 768px) 150px, 208px" className="object-cover transition-transform duration-500 ease-out group-hover:scale-105" />
+        <Image src={imageSrc || null} alt={title} fill priority={priority} sizes="(max-width: 768px) 150px, 208px" className="object-cover transition-transform duration-500 ease-out group-hover:scale-105" />
       </div>
       
       <button
