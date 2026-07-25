@@ -120,7 +120,7 @@ export default function AdvanceSearchBar({
       </div>
 
       {/* DESKTOP: mascot, positioned outside normal flow — untouched */}
-      <div className="hidden md:block absolute -top-[125px] left-[-10px] z-30 pointer-events-none">
+      <div className="hidden md:block absolute -top-[-30px] left-[30px] z-30 pointer-events-none">
         <img
           src="/assets/searchlogo 1.png"
           alt="Camera Mascot"
