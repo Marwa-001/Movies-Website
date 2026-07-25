@@ -106,23 +106,27 @@ const Navbar = () => {
                     </div>
 
                     {/* Desktop Navigation */}
-                    <ul className="hidden md:flex items-center gap-8 mr-80">
-                        {navLinks.map((link) => (
-                            <li key={link.name} className="relative group">
-                                <Link
-                                    href={link.href}
-                                    onClick={() => setActiveTab(link.name)}
-                                    className={`text-[15px] font-medium transition-colors duration-300 pb-1 ${activeTab === link.name ? "text-[var(--text-primary)]" : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
-                                        }`}
-                                >
-                                    {link.name}
-                                </Link>
-                                {activeTab === link.name && (
-                                    <div className="absolute -bottom-[2px] left-0 right-0 h-[2px] bg-blue-500 rounded-full blur-[1.5px] shadow-[0_0_14px_rgba(59,130,246,0.9)]" />
-                                )}
-                            </li>
-                        ))}
-                    </ul>
+<ul className="hidden md:flex items-center gap-8 mr-80">
+    {navLinks.map((link) => (
+        <li key={link.name} className="relative group">
+            <Link
+                href={link.href}
+                onClick={() => setActiveTab(link.name)}
+                style={{
+                    color: activeTab === link.name 
+                        ? (theme === 'light' ? '#091E51' : '#FFFFFF') 
+                        : (theme === 'light' ? '#091E51' : '#9ca3af')
+                }}
+                className="text-[15px] font-medium transition-colors duration-300 pb-1 hover:opacity-80"
+            >
+                {link.name}
+            </Link>
+            {activeTab === link.name && (
+                <div className="absolute -bottom-[2px] left-0 right-0 h-[2px] bg-blue-500 rounded-full blur-[1.5px] shadow-[0_0_14px_rgba(59,130,246,0.9)]" />
+            )}
+        </li>
+    ))}
+</ul>
 
                     {/* Desktop Right Side Icons */}
                     <div className="hidden md:flex items-center gap-6 text-gray-300">
@@ -175,55 +179,60 @@ const Navbar = () => {
                 </div>
 
                 {/* Mobile Dropdown Menu */}
-                {isMenuOpen && (
-                    <div className="md:hidden absolute top-full left-0 right-0 mt-2 p-4 rounded-[16px] overflow-hidden flex flex-col gap-4 z-50 transition-all duration-300"
+{isMenuOpen && (
+    <div className="md:hidden absolute top-full left-0 right-0 mt-2 p-4 rounded-[16px] overflow-hidden flex flex-col gap-4 z-50 transition-all duration-300"
+        style={{
+            backgroundColor: theme === 'light' ? 'rgba(255, 255, 255, 0.9)' : 'rgba(26, 25, 25, 0.95)',
+            backdropFilter: 'blur(12px)',
+            WebkitBackdropFilter: 'blur(12px)',
+            border: '1px solid rgba(34, 142, 229, 0.3)'
+        }}
+    >
+        <ul className="flex flex-col gap-4">
+            {navLinks.map((link) => (
+                <li key={link.name}>
+                    <Link
+                        href={link.href}
+                        onClick={() => { setActiveTab(link.name); setIsMenuOpen(false); }}
                         style={{
-                            backgroundColor: theme === 'light' ? 'rgba(255, 255, 255, 0.9)' : 'rgba(26, 25, 25, 0.95)',
-                            backdropFilter: 'blur(12px)',
-                            WebkitBackdropFilter: 'blur(12px)',
-                            border: '1px solid rgba(34, 142, 229, 0.3)'
+                            color: activeTab === link.name 
+                                ? '#228EE5' 
+                                : (theme === 'light' ? '#091E51' : '#FFFFFF')
                         }}
+                        className="text-[16px] font-medium transition-colors"
                     >
-                        <ul className="flex flex-col gap-4">
-                            {navLinks.map((link) => (
-                                <li key={link.name}>
-                                    <Link
-                                        href={link.href}
-                                        onClick={() => { setActiveTab(link.name); setIsMenuOpen(false); }}
-                                        className={`text-[16px] font-medium transition-colors ${activeTab === link.name ? "text-blue-500" : "text-[var(--text-primary)]"}`}
-                                    >
-                                        {link.name}
-                                    </Link>
-                                </li>
-                            ))}
-                        </ul>
+                        {link.name}
+                    </Link>
+                </li>
+            ))}
+        </ul>
 
-                        <div className="h-[1px] bg-white/10 w-full" />
+        <div className="h-[1px] bg-white/10 w-full" />
 
-                        <div className="flex items-center justify-between pt-2">
-                            {/* Mobile Auth Button */}
-                            {isAuthenticated ? (
-                                <button onClick={() => logout.mutate()} className="rounded-full bg-[#E5228E] px-6 py-2 text-sm font-semibold text-white shadow-lg">
-                                    Logout
-                                </button>
-                            ) : (
-                                <Link href="/login" className="rounded-full bg-[#E5228E] px-6 py-2 text-sm font-semibold text-white shadow-lg">
-                                    Login
-                                </Link>
-                            )}
-                            
-                            {/* Mobile Theme Toggle */}
-                            <button onClick={toggleTheme} className="p-2 rounded-full bg-white/5 border border-white/10">
-                                <img 
-                                    src={theme === 'dark' ? '/assets/sun.png' : '/assets/moon.png'} 
-                                    alt="Theme" 
-                                    className="h-5 w-5"
-                                    style={{ filter: 'var(--icon-filter)' }}
-                                />
-                            </button>
-                        </div>
-                    </div>
-                )}
+        <div className="flex items-center justify-between pt-2">
+            {/* Mobile Auth Button */}
+            {isAuthenticated ? (
+                <button onClick={() => logout.mutate()} className="rounded-full bg-[#E5228E] px-6 py-2 text-sm font-semibold text-white shadow-lg">
+                    Logout
+                </button>
+            ) : (
+                <Link href="/login" className="rounded-full bg-[#E5228E] px-6 py-2 text-sm font-semibold text-white shadow-lg">
+                    Login
+                </Link>
+            )}
+            
+            {/* Mobile Theme Toggle */}
+            <button onClick={toggleTheme} className="p-2 rounded-full bg-white/5 border border-white/10">
+                <img 
+                    src={theme === 'dark' ? '/assets/sun.png' : '/assets/moon.png'} 
+                    alt="Theme" 
+                    className="h-5 w-5"
+                    style={{ filter: 'var(--icon-filter)' }}
+                />
+            </button>
+        </div>
+    </div>
+)}
             </div>
         </nav>
     );

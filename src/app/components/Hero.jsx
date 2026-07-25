@@ -86,7 +86,7 @@ const Hero = () => {
   };
 
   return (
-    <section className="relative w-full h-[624px] md:min-h-screen flex flex-col items-start justify-end md:justify-center px-4 md:px-12 lg:px-24 overflow-hidden md:overflow-visible">
+    <section className="relative w-full h-[624px] md:min-h-screen flex flex-col items-start justify-end px-4 md:px-12 lg:px-24 pb-16 md:pb-24 overflow-hidden md:overflow-visible">
       <div
   className="absolute inset-0 w-full h-full z-0 bg-cover bg-center transition-[background-image] duration-700"
   style={{ backgroundImage: `url('${active.backdropSrc || active.imageSrc}')` }}
@@ -97,7 +97,7 @@ const Hero = () => {
 
       <Navbar />
 
-      <div className="relative z-10 w-full md:w-[553px] mb-8 md:mb-0 md:mt-80 flex flex-col items-start">
+      <div className="relative z-10 w-full md:w-[553px] mb-8 md:mb-0 flex flex-col items-start">
         
         {/* Mobile Stacking Cards (Centered) */}
         <div className="flex justify-center items-end mb-8 md:hidden w-full">
@@ -123,17 +123,17 @@ const Hero = () => {
         </div>
 
         {/* Heading */}
-        <h1 className="text-[48px] font-bold md:text-[96px] md:font-normal tracking-tight mb-2 md:mb-4 drop-shadow-2xl">
+        <h1 className="text-[48px] font-bold md:text-[96px] md:font-normal tracking-tight mb-2 md:mb-2 drop-shadow-2xl leading-tight md:leading-none">
           {active.title}
         </h1>
 
         {/* Paragraph */}
-        <p className="text-[12px] font-bold md:text-[16px] md:font-medium text-[var(--text-secondary)] max-w-xl mb-6 md:mb-10 opacity-90 line-clamp-3">
+        <p className="text-[12px] font-bold md:text-[16px] md:font-medium text-[var(--text-secondary)] max-w-xl mb-6 md:mb-6 opacity-90 line-clamp-3">
           {active.overview || FALLBACK.overview}
         </p>
 
         {/* Info Row */}
-        <div className="flex items-center gap-4 md:gap-6 mb-8 md:mb-10 scale-90 md:scale-100 origin-left">
+        <div className="flex items-center gap-4 md:gap-6 mb-8 md:mb-6 scale-90 md:scale-100 origin-left">
           <StarRow rating={active.voteAverage} />
           <div className="flex items-center gap-2 md:gap-3">
             <img src="/assets/imdb.png" alt="IMDb" className="h-[16px] md:h-[20px] w-auto object-contain" />
@@ -157,6 +157,7 @@ const Hero = () => {
       </div>
 
       {/* Desktop Stacking Cards  */}
+       {/* Desktop Stacking Cards  */}
        <div className="hidden md:flex absolute bottom-8 right-12 z-20 items-end">
         {order.map((item, idx) => {
           const isMain = idx === 1;
@@ -165,15 +166,13 @@ const Hero = () => {
               key={idx}
               onClick={() => idx !== 1 && goTo(idx - 1)}
               className={`
-                ${isMain ? 'w-[174px] h-[174px] z-40 scale-105 border-1 border-[#228EE5] shadow-[0_0_40px_rgba(34,142,229,0.4)] -ml-12' : 'w-[122px] h-[122px] border border-[var(--border-subtle)]'}
+                ${isMain ? 'w-[174px] h-[174px] z-40 scale-105 border-1 border-[#228EE5] shadow-[0_0_40px_rgba(34,142,229,0.4)] -ml-12' : 'w-[122px] h-[122px] border border-[var(--border-subtle)] opacity-50'}
                 ${idx > 1 ? '-ml-10' : ''}
-                ${idx === 0 ? 'z-10' : idx === 2 ? 'z-30' : 'z-20 opacity-60'}
+                ${idx === 0 ? 'z-10' : idx === 2 ? 'z-30' : 'z-20'}
                 rounded-[20px] overflow-hidden transition-all cursor-pointer relative hover:scale-110
               `}
             >
               <img src={item.imageSrc} className="w-full h-full object-cover" alt="" />
-              {idx === 0 && <div className="absolute inset-0 bg-black/30" />}
-              {idx === 2 && <div className="absolute inset-0 bg-black/10" />}
             </div>
           );
         })}

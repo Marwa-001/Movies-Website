@@ -23,6 +23,7 @@
     --bg-surface-strong: rgba(255, 255, 255, 0.10);
     --border-subtle: rgba(255, 255, 255, 0.10);
     --text-primary: #ffffff;
+    --nav-item-color: #ffffff;
     --text-secondary: #9ca3af;
     --icon-filter: brightness(0) invert(1); /* white icons on dark */
      --bg-glow: radial-gradient(circle at 20% 50%, #1e1b4b 0%, transparent 50%);
@@ -35,6 +36,7 @@
     --bg-surface-strong: rgba(10, 12, 16, 0.08);
     --border-subtle: rgba(10, 12, 16, 0.10);
     --text-primary: #0a0c10;
+    --nav-item-color: #091E51;
     --text-secondary: #4b5563;
     --icon-filter: none; /* keep icons dark on light */
     --bg-glow: transparent; 
