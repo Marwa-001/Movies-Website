@@ -2,34 +2,50 @@
 
 import React from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { Lato } from "next/font/google";
 
+const lato = Lato({ subsets: ["latin"], weight: ["400", "700"] });
+
+// Frame sizes measured in Figma (mobile). Desktop sizes are scaled ~3x to
+// match the same proportion the rest of the section already scales at.
 const kidsContent = [
   {
     id: 1,
-    character: "/assets/kids-pig.png", // Transparent PNG of character
-    background: "/assets/kids-pig-bg.jpg", // The poster background
+    background: "/assets/kids1.png",
+    mobile: { w: 76.74, h: 115.83 },
+    desktop: { w: 230, h: 347 },
   },
   {
     id: 2,
-    character: "/assets/kids-panda.png",
-    background: "/assets/kids-panda-bg.jpg",
+    background: "/assets/kids2.png",
+    mobile: { w: 111.56, h: 123.64 },
+    desktop: { w: 335, h: 371 },
   },
   {
     id: 3,
-    character: "/assets/kids-raya.png",
-    background: "/assets/kids-raya-bg.jpg",
+    background: "/assets/kids3.png",
+    mobile: { w: 142.12, h: 120.09 },
+    desktop: { w: 426, h: 360 },
   },
 ];
 
 export default function KidsSection() {
+  const router = useRouter();
+
   return (
-    <section className="relative bg-[#228EE5] py-20 px-6 overflow-hidden flex flex-col items-center">
+    <section className={`${lato.className} relative bg-[#228EE5] py-10 md:py-20 px-4 md:px-6 overflow-hidden flex flex-col items-center`}>
+      
       {/* Header Text */}
-      <div className="text-center mb-16 max-w-3xl">
-        <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+      <div className="text-center mb-8 md:mb-10 max-w-[280px] md:max-w-4xl">
+        <h2
+          className="text-[#EBFAFF] mb-2 md:mb-4 font-bold text-[20px] md:text-[48px] leading-none"
+        >
           Family-friendly streaming
         </h2>
-        <p className="text-white/90 text-sm md:text-base leading-relaxed px-4">
+        <p
+          className="text-[#EBFAFF] font-medium text-[10px] md:text-[24px] leading-[1.2] md:leading-none tracking-normal"
+        >
           create kids profile, set parental control, and choose rating levels.
           Easily find new favorites by sorting by characters and using age
           filters.
@@ -37,7 +53,7 @@ export default function KidsSection() {
       </div>
 
       {/* Main Content Area */}
-      <div className="relative">
+      <div className="relative w-full max-w-6xl">
         {/* Posters Row */}
         <div className="flex flex-row gap-4 md:gap-8 justify-center items-end">
           {kidsContent.map((item) => (
@@ -46,24 +62,33 @@ export default function KidsSection() {
         </div>
 
         {/* Reflection Row */}
-        <div 
-          className="flex flex-row gap-4 md:gap-8 justify-center items-start opacity-30 pointer-events-none select-none"
+        <div
+          className="flex flex-row gap-4 md:gap-8 justify-center items-start opacity-35 pointer-events-none select-none mt-1"
           style={{
-            maskImage: "linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 70%)",
-            WebkitMaskImage: "linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 70%)",
+            maskImage: "linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 92%)",
+            WebkitMaskImage: "linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 92%)",
           }}
         >
           {kidsContent.map((item) => (
             <div key={`ref-${item.id}`} className="scale-y-[-1]">
-               <KidsCard item={item} isReflection />
+              <KidsCard item={item} isReflection />
             </div>
           ))}
         </div>
 
-        {/* Action Button */}
-        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20">
-          <button className="bg-[#05070a] hover:bg-black text-white px-8 py-3 rounded-xl font-semibold text-sm transition-all shadow-2xl border border-white/5">
-            Watch the children's section
+        {/* Action Button - Exact Figma Mobile Specs vs Desktop */}
+        <div className="absolute bottom-4 md:bottom-10 left-1/2 -translate-x-1/2 z-20">
+          <button
+            type="button"
+            onClick={() => router.push("/kids")}
+            className={`
+              bg-[#030A1B] text-[#EBFAFF] border border-[#EBFAFF] 
+              flex items-center justify-center transition-all hover:scale-105 active:scale-95
+              w-[150px] h-[24px] rounded-[8px] text-[10px] font-bold
+              md:w-[429px] md:h-[61px] md:rounded-[12px] md:text-[24px]
+            `}
+          >
+            Watch the children&apos;s section
           </button>
         </div>
       </div>
@@ -73,24 +98,34 @@ export default function KidsSection() {
 
 function KidsCard({ item, isReflection = false }) {
   return (
-    <div className="relative w-28 h-40 md:w-64 md:h-80 group">
-      {/* The Colored/Image Frame */}
-      <div className="absolute bottom-0 w-full h-[85%] rounded-xl md:rounded-2xl overflow-hidden shadow-xl border border-white/20">
+    // The source art itself is oversized relative to the "frame" — the
+    // character (pig's raised arm, panda's head, Raya's cape/leg) is meant
+    // to spill past the rectangle. So: the frame is a separate bordered box
+    // sized exactly to the Figma-measured dimensions per character, and the
+    // image sits on top of it larger + centered with overflow left visible,
+    // instead of being clipped to a uniform box.
+    <div
+      className={`group relative transition-transform duration-500 w-[var(--card-mw)] h-[var(--card-mh)] md:w-[var(--card-dw)] md:h-[var(--card-dh)] ${
+        !isReflection ? "hover:scale-105 hover:-translate-y-2" : ""
+      }`}
+      style={{
+        "--card-mw": `${item.mobile.w}px`,
+        "--card-mh": `${item.mobile.h}px`,
+        "--card-dw": `${item.desktop.w}px`,
+        "--card-dh": `${item.desktop.h}px`,
+      }}
+    >
+      {/* Oversized image, bled out on the sides and top only (where the
+          ears/head/hair/cape are meant to spill past the frame) — the
+          BOTTOM stays pinned to the frame's own bottom edge so all three
+          cards share the same baseline instead of drifting per-image
+          depending on each source PNG's own aspect ratio. */}
+      <div className="absolute left-[-6%] right-[-6%] top-[-8%] bottom-0 overflow-visible pointer-events-none">
         <Image
           src={item.background}
-          alt="background"
-          fill
-          className="object-cover"
-        />
-      </div>
-
-      {/* The "Pop-out" Character */}
-      {/* We make this container taller than the frame and align to bottom */}
-      <div className="absolute bottom-0 w-full h-[110%] transition-transform duration-500 group-hover:scale-105 group-hover:-translate-y-2">
-        <Image
-          src={item.character}
           alt="character"
           fill
+          sizes="(max-width: 768px) 180px, 500px"
           className="object-contain object-bottom"
         />
       </div>
