@@ -86,21 +86,38 @@ const Hero = () => {
   };
 
   return (
-    <section className="relative w-full h-[624px] md:min-h-screen flex flex-col items-start justify-end px-4 md:px-12 lg:px-24 pb-16 md:pb-24 overflow-hidden md:overflow-visible">
+    <section className="relative w-full md:h-[624px] md:min-h-screen flex flex-col items-start justify-start md:justify-end px-0 md:px-12 lg:px-24 pb-0 md:pb-24 overflow-visible md:overflow-visible">
+
+      {/* ===== MOBILE: image block (fully visible, in normal flow) ===== */}
+      <div className="relative w-full aspect-[3/4] md:hidden">
+        <img
+          src={active.backdropSrc || active.imageSrc}
+          className="w-full h-full object-cover"
+          alt=""
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-page)] via-transparent to-transparent" />
+      </div>
+
+      {/* ===== DESKTOP: absolute background image (unchanged) ===== */}
       <div
-  className="absolute inset-0 w-full h-full z-0 bg-cover bg-center transition-[background-image] duration-700"
-  style={{ backgroundImage: `url('${active.backdropSrc || active.imageSrc}')` }}
->
+        className="hidden md:block absolute inset-0 w-full h-full z-0 bg-cover bg-center transition-[background-image] duration-700"
+        style={{ backgroundImage: `url('${active.backdropSrc || active.imageSrc}')` }}
+      >
         <div className="absolute inset-0 bg-gradient-to-r from-[var(--bg-page)] via-[var(--bg-page)]/20 md:via-[var(--bg-page)]/10 to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-page)] via-transparent to-transparent" />
       </div>
 
-      <Navbar />
+      <div className="hidden md:block">
+        <Navbar />
+      </div>
+      <div className="md:hidden absolute top-0 left-0 right-0 z-20">
+        <Navbar />
+      </div>
 
-      <div className="relative z-10 w-full md:w-[553px] mb-8 md:mb-0 flex flex-col items-start">
-        
-        {/* Mobile Stacking Cards (Centered) */}
-        <div className="flex justify-center items-end mb-8 md:hidden w-full">
+      <div className="relative z-10 w-full md:w-[553px] mb-8 md:mb-0 flex flex-col items-start px-4 md:px-0">
+
+        {/* Mobile Stacking Cards — now sits right below the image, above the text */}
+        <div className="flex justify-center items-end mt-0 mb-2 md:hidden w-full">
           {order.map((item, idx) => {
             const isMain = idx === 1;
             return (
@@ -110,20 +127,18 @@ const Hero = () => {
                 className={`
                   ${isMain ? 'w-[74px] h-[100px] z-40 scale-110 border-2 border-[#228EE5] shadow-[0_0_20px_rgba(34,142,229,0.4)]' : 'w-[52px] h-[72px] border border-[var(--border-subtle)]'}
                   ${idx > 0 ? '-ml-4' : ''}
-                  ${idx === 0 ? 'z-10' : idx === 2 ? 'z-30' : 'z-20 opacity-60'}
+                  ${idx === 0 ? 'z-10' : idx === 2 ? 'z-30' : 'z-20'}
                   rounded-[12px] overflow-hidden transition-all cursor-pointer relative
                 `}
               >
                 <img src={item.imageSrc} className="w-full h-full object-cover" alt="" />
-                {idx === 0 && <div className="absolute inset-0 bg-black/30" />}
-                {idx === 2 && <div className="absolute inset-0 bg-black/10" />}
               </div>
             );
           })}
         </div>
 
         {/* Heading */}
-        <h1 className="text-[48px] font-bold md:text-[96px] md:font-normal tracking-tight mb-2 md:mb-2 drop-shadow-2xl leading-tight md:leading-none">
+        <h1 className="text-[48px] font-bold md:font-normal tracking-tight mb-2 md:mb-2 drop-shadow-2xl leading-tight md:leading-none">
           {active.title}
         </h1>
 
@@ -145,7 +160,7 @@ const Hero = () => {
         </div>
 
         {/* Action Row */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 pb-8 md:pb-0">
           <button className="bg-[#228EE5] hover:bg-blue-600 rounded-full font-bold md:font-[500] text-[14px] md:text-[16px] transition-all flex items-center justify-center gap-2 w-[128px] h-[32px] md:w-[168px] md:h-[40px]">
             <img src='/assets/play.png' className='w-3 h-3 md:w-[16px] md:h-[16px]' alt="" /> 
             <span className="whitespace-nowrap">Watch Movie</span>
@@ -156,9 +171,8 @@ const Hero = () => {
         </div>
       </div>
 
-      {/* Desktop Stacking Cards  */}
-       {/* Desktop Stacking Cards  */}
-       <div className="hidden md:flex absolute bottom-8 right-12 z-20 items-end">
+      {/* Desktop Stacking Cards */}
+      <div className="hidden md:flex absolute bottom-8 right-12 z-20 items-end">
         {order.map((item, idx) => {
           const isMain = idx === 1;
           return (
