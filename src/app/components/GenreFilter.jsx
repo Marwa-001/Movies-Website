@@ -1,10 +1,40 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export default function GenreFilter({ genres, activeGenres, onToggle }) {
   const scrollRef = useRef(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
+
+  // Function to check scroll position
+  const checkScroll = () => {
+    if (scrollRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+      // scrollLeft > 0 means we can go back
+      setCanScrollLeft(scrollLeft > 0);
+      setCanScrollRight(scrollLeft + clientWidth < scrollWidth - 1);
+    }
+  };
+
+  useEffect(() => {
+    const scrollContainer = scrollRef.current;
+    if (scrollContainer) {
+      // Check initial state
+      checkScroll();
+      
+      // Add event listener
+      scrollContainer.addEventListener("scroll", checkScroll);
+      // Re-check on window resize (in case the container width changes)
+      window.addEventListener("resize", checkScroll);
+
+      return () => {
+        scrollContainer.removeEventListener("scroll", checkScroll);
+        window.removeEventListener("resize", checkScroll);
+      };
+    }
+  }, [genres]); // Re-run if genres list changes
 
   const scrollBy = (dir) => {
     scrollRef.current?.scrollBy({ left: dir * 220, behavior: "smooth" });
@@ -16,7 +46,9 @@ export default function GenreFilter({ genres, activeGenres, onToggle }) {
         type="button"
         aria-label="Scroll genres left"
         onClick={() => scrollBy(-1)}
-        className="hidden md:flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full text-[var(--text-secondary)] transition-colors hover:text-[var(--text-primary)]"
+        disabled={!canScrollLeft}
+        className={`hidden md:flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full text-[var(--text-secondary)] transition-all 
+          ${!canScrollLeft ? "opacity-20 cursor-not-allowed" : "hover:text-[var(--text-primary)]"}`}
       >
         <ChevronLeft className="h-6 w-6" />
       </button>
@@ -35,9 +67,7 @@ export default function GenreFilter({ genres, activeGenres, onToggle }) {
               aria-pressed={isActive}
               className={`
                 flex-shrink-0 whitespace-nowrap font-medium transition-all duration-200 flex items-center justify-center
-                /* Mobile Styles: 21px height, 15px radius, 4px/8px padding */
                 h-[21px] px-2 text-[10px] rounded-[15px] 
-                /* Desktop Styles: 41px height, 25px radius, 12px/28px padding */
                 md:h-[41px] md:px-7 md:text-base md:rounded-[25px] md:border-[0.5px]
                 ${
                   isActive 
@@ -56,7 +86,9 @@ export default function GenreFilter({ genres, activeGenres, onToggle }) {
         type="button"
         aria-label="Scroll genres right"
         onClick={() => scrollBy(1)}
-        className="hidden md:flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full text-[var(--text-secondary)] transition-colors hover:text-[var(--text-primary)]"
+        disabled={!canScrollRight}
+        className={`hidden md:flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full text-[var(--text-secondary)] transition-all 
+          ${!canScrollRight ? "opacity-20 cursor-not-allowed" : "hover:text-[var(--text-primary)]"}`}
       >
         <ChevronRight className="h-6 w-6" />
       </button>
