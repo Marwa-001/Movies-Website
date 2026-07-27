@@ -4,12 +4,12 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 
 export default function CollectionHero({ collections }) {
-  const [current, setCurrent] = useState(1);
+  const [current, setCurrent] = useState(0); // Start at 0 like a standard array
 
-  const hasData = collections && collections.length >= 4;
+  const hasData = collections && collections.length > 0;
 
   useEffect(() => {
-    if (!hasData) return;
+    if (!hasData || collections.length <= 1) return;
     const timer = setInterval(() => {
       setCurrent((prev) => (prev + 1) % collections.length);
     }, 5000);
@@ -20,20 +20,14 @@ export default function CollectionHero({ collections }) {
     return <div className="h-[500px] w-full bg-[var(--bg-page)] animate-pulse rounded-[32px] mb-12" />;
   }
 
-  const active = hasData ? collections[current] : collections[0];
+  const active = collections[current];
 
-  const order = hasData
-    ? [
-        collections[(current + collections.length - 1) % collections.length],
-        collections[current],
-        collections[(current + 1) % collections.length],
-        collections[(current + 2) % collections.length],
-      ]
-    : [collections[0], collections[0], collections[0], collections[0]];
+  // Static order: we just use the collections array as is
+  const order = collections;
 
-  const goTo = (offset) => {
+  const goTo = (index) => {
     if (!hasData) return;
-    setCurrent((prev) => (prev + offset + collections.length) % collections.length);
+    setCurrent(index);
   };
 
   return (
@@ -48,24 +42,22 @@ export default function CollectionHero({ collections }) {
 
       <div className="relative z-10 w-full md:w-[553px] mb-8 md:mb-0 flex flex-col items-start">
 
-        {/* Mobile Stacking Cards (Centered) */}
+        {/* Mobile Stacking Cards (Static Order, Active Pops) */}
         <div className="flex justify-center items-end mb-8 md:hidden w-full">
           {order.map((item, idx) => {
-            const isMain = idx === 1;
+            const isMain = idx === current;
             return (
               <div
                 key={idx}
-                onClick={() => idx !== 1 && goTo(idx - 1)}
+                onClick={() => goTo(idx)}
                 className={`
-                  ${isMain ? 'w-[74px] h-[100px] z-40 scale-110 border-2 border-[#228EE5] shadow-[0_0_20px_rgba(34,142,229,0.4)]' : 'w-[52px] h-[72px] border border-[var(--border-subtle)]'}
+                  ${isMain ? 'w-[74px] h-[100px] z-40 scale-110 border-2 border-[#228EE5] shadow-[0_0_20px_rgba(34,142,229,0.4)]' : 'w-[52px] h-[72px] border border-[var(--border-subtle)] opacity-60'}
                   ${idx > 0 ? '-ml-4' : ''}
-                  ${idx === 0 ? 'z-10' : idx === 2 ? 'z-30' : 'z-20 opacity-60'}
-                  rounded-[12px] overflow-hidden transition-all cursor-pointer relative
+                  ${isMain ? 'z-40' : 'z-20'}
+                  rounded-[12px] overflow-hidden transition-all duration-500 cursor-pointer relative
                 `}
               >
                 <img src={item.imageSrc} className="w-full h-full object-cover" alt="" />
-                {idx === 0 && <div className="absolute inset-0 bg-black/30" />}
-                {idx === 2 && <div className="absolute inset-0 bg-black/10" />}
               </div>
             );
           })}
@@ -108,8 +100,8 @@ export default function CollectionHero({ collections }) {
 
         {/* Action Row */}
         <div className="flex items-center gap-3">
-          <button className="bg-[#228EE5] hover:bg-blue-600 rounded-full font-bold md:font-[500] text-[14px] md:text-[16px] transition-all flex items-center justify-center gap-2 w-[128px] h-[32px] md:w-[168px] md:h-[40px]">
-            <img src='/assets/play.png' className='w-3 h-3 md:w-[16px] md:h-[16px]' alt="" />
+          <button className="bg-[#228EE5] hover:bg-blue-600 rounded-full font-bold md:font-[500] text-[14px] md:text-[16px] transition-all flex items-center justify-center gap-2 w-[148px] h-[32px] md:w-[168px] md:h-[40px]">
+            <img src='/assets/play.png' className='w- h-3 md:w-[16px] md:h-[16px]' alt="" />
             <span className="whitespace-nowrap">Watch Collection</span>
           </button>
           <button className="border border-[var(--border-subtle)] text-[var(--text-primary)] hover:bg-[var(--bg-surface)] rounded-full font-bold md:font-[500] text-[14px] md:text-[16px] transition-all flex items-center justify-center gap-2 w-[128px] h-[32px] md:w-[128px] md:h-[40px]">
@@ -118,24 +110,22 @@ export default function CollectionHero({ collections }) {
         </div>
       </div>
 
-      {/* Desktop Stacking Cards */}
+      {/* Desktop Stacking Cards (Static Order, Active Pops) */}
       <div className="hidden md:flex absolute bottom-8 right-12 z-20 items-end">
         {order.map((item, idx) => {
-          const isMain = idx === 1;
+          const isMain = idx === current;
           return (
             <div
               key={idx}
-              onClick={() => idx !== 1 && goTo(idx - 1)}
+              onClick={() => goTo(idx)}
               className={`
-                ${isMain ? 'w-[174px] h-[174px] z-40 scale-105 border-1 border-[#228EE5] shadow-[0_0_40px_rgba(34,142,229,0.4)] -ml-12' : 'w-[122px] h-[122px] border border-[var(--border-subtle)]'}
-                ${idx > 1 ? '-ml-10' : ''}
-                ${idx === 0 ? 'z-10' : idx === 2 ? 'z-30' : 'z-20 opacity-60'}
-                rounded-[20px] overflow-hidden transition-all cursor-pointer relative hover:scale-110
+                ${isMain ? 'w-[174px] h-[174px] z-40 scale-105 border-1 border-[#228EE5] shadow-[0_0_40px_rgba(34,142,229,0.4)] -ml-12' : 'w-[122px] h-[122px] border border-[var(--border-subtle)] opacity-50'}
+                ${idx > 0 ? '-ml-10' : ''}
+                ${isMain ? 'z-40' : 'z-20'}
+                rounded-[20px] overflow-hidden transition-all duration-500 cursor-pointer relative hover:scale-110
               `}
             >
               <img src={item.imageSrc} className="w-full h-full object-cover" alt="" />
-              {idx === 0 && <div className="absolute inset-0 bg-black/30" />}
-              {idx === 2 && <div className="absolute inset-0 bg-black/10" />}
             </div>
           );
         })}

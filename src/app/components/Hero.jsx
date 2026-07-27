@@ -55,16 +55,16 @@ function StarRow({ rating = 0 }) {
   );
 }
 
-const Hero = ({onSeeMore}) => {
-  const router = useRouter()
+const Hero = ({ onSeeMore }) => {
+  const router = useRouter();
   const { data: trending } = useTrending({ mediaType: 'movie', timeWindow: 'week' });
   const features = (trending || []).slice(0, 4);
   const hasData = features.length >= 4;
 
   const [current, setCurrent] = useState(1);
 
-   const handleWatchNow = () => {
-    if (!active?.id) return; 
+  const handleWatchNow = () => {
+    if (!active?.id) return;
     const params = new URLSearchParams({
       title: active.title || "",
       poster: active.imageSrc || "",
@@ -83,18 +83,22 @@ const Hero = ({onSeeMore}) => {
 
   const active = hasData ? features[current] : FALLBACK;
 
+  /*
+    FIX: the stack order is now STATIC — it no longer rotates so that
+    "current" is always forced into slot idx===1. Each card stays in its
+    own fixed position, and only the card whose index matches `current`
+    gets the "popped up" treatment. That way, when the timer advances,
+    the previously-popped card shrinks back into its own place and the
+    *next* card in its own slot pops up — instead of the pop effect
+    always happening in the same visual spot.
+  */
   const order = hasData
-    ? [
-        features[(current + features.length - 1) % features.length],
-        features[current],
-        features[(current + 1) % features.length],
-        features[(current + 2) % features.length],
-      ]
+    ? features
     : FALLBACK_THUMBS.map((src) => ({ imageSrc: src, title: 'Featured title' }));
 
-  const goTo = (offset) => {
+  const goTo = (idx) => {
     if (!hasData) return;
-    setCurrent((prev) => (prev + offset + features.length) % features.length);
+    setCurrent(idx);
   };
 
   return (
@@ -128,19 +132,19 @@ const Hero = ({onSeeMore}) => {
 
       <div className="relative z-10 w-full md:w-[553px] mb-8 md:mb-0 flex flex-col items-start px-4 md:px-0">
 
-        {/* Mobile Stacking Cards — now sits right below the image, above the text */}
+        {/* Mobile Stacking Cards — static order, only the current index pops up */}
         <div className="flex justify-center items-end mt-0 mb-2 md:hidden w-full">
           {order.map((item, idx) => {
-            const isMain = idx === 1;
+            const isMain = idx === current;
             return (
               <div
                 key={idx}
-                onClick={() => idx !== 1 && goTo(idx - 1)}
+                onClick={() => goTo(idx)}
                 className={`
                   ${isMain ? 'w-[74px] h-[100px] z-40 scale-110 border-2 border-[#228EE5] shadow-[0_0_20px_rgba(34,142,229,0.4)]' : 'w-[52px] h-[72px] border border-[var(--border-subtle)]'}
                   ${idx > 0 ? '-ml-4' : ''}
-                  ${idx === 0 ? 'z-10' : idx === 2 ? 'z-30' : 'z-20'}
-                  rounded-[12px] overflow-hidden transition-all cursor-pointer relative
+                  ${isMain ? 'z-40' : 'z-20'}
+                  rounded-[12px] overflow-hidden transition-all duration-500 cursor-pointer relative
                 `}
               >
                 <img src={item.imageSrc} className="w-full h-full object-cover" alt="" />
@@ -172,33 +176,32 @@ const Hero = ({onSeeMore}) => {
         </div>
 
         {/* Action Row */}
-        {/* Action Row */}
-<div className="flex items-center gap-3 pb-8 md:pb-0">
-  <button
-    onClick={handleWatchNow}   // ADD THIS
-    className="bg-[#228EE5] hover:bg-blue-600 rounded-full font-bold md:font-[500] text-[14px] md:text-[16px] transition-all flex items-center justify-center gap-2 w-[128px] h-[32px] md:w-[168px] md:h-[40px]">
-    <img src='/assets/play.png' className='w-3 h-3 md:w-[16px] md:h-[16px]' alt="" /> 
-    <span className="whitespace-nowrap">Watch Movie</span>
-  </button>
+        <div className="flex items-center gap-3 pb-8 md:pb-0">
+          <button
+            onClick={handleWatchNow}
+            className="bg-[#228EE5] hover:bg-blue-600 rounded-full font-bold md:font-[500] text-[14px] md:text-[16px] transition-all flex items-center justify-center gap-2 w-[128px] h-[32px] md:w-[168px] md:h-[40px]">
+            <img src='/assets/play.png' className='w-3 h-3 md:w-[16px] md:h-[16px]' alt="" />
+            <span className="whitespace-nowrap">Watch Movie</span>
+          </button>
           <button className="border border-[var(--border-subtle)] text-[var(--text-primary)] hover:bg-[var(--bg-surface)] rounded-full font-bold md:font-[500] text-[14px] md:text-[16px] transition-all flex items-center justify-center gap-2 w-[128px] h-[32px] md:w-[128px] md:h-[40px]">
             <span className="whitespace-nowrap">More Info</span> <span>→</span>
           </button>
         </div>
       </div>
 
-      {/* Desktop Stacking Cards */}
+      {/* Desktop Stacking Cards — static order, only the current index pops up */}
       <div className="hidden md:flex absolute bottom-8 right-12 z-20 items-end">
         {order.map((item, idx) => {
-          const isMain = idx === 1;
+          const isMain = idx === current;
           return (
             <div
               key={idx}
-              onClick={() => idx !== 1 && goTo(idx - 1)}
+              onClick={() => goTo(idx)}
               className={`
                 ${isMain ? 'w-[174px] h-[174px] z-40 scale-105 border-1 border-[#228EE5] shadow-[0_0_40px_rgba(34,142,229,0.4)] -ml-12' : 'w-[122px] h-[122px] border border-[var(--border-subtle)] opacity-50'}
                 ${idx > 1 ? '-ml-10' : ''}
-                ${idx === 0 ? 'z-10' : idx === 2 ? 'z-30' : 'z-20'}
-                rounded-[20px] overflow-hidden transition-all cursor-pointer relative hover:scale-110
+                ${isMain ? 'z-40' : 'z-20'}
+                rounded-[20px] overflow-hidden transition-all duration-500 cursor-pointer relative hover:scale-110
               `}
             >
               <img src={item.imageSrc} className="w-full h-full object-cover" alt="" />
