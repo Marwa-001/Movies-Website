@@ -31,7 +31,9 @@ export default function Home() {
   return (
     <div className="bg-[var(--bg-page)] text-[var(--text-primary)]">
       {/* <Navbar /> */}
-      <Hero />
+      <Hero onSeeMore={()=>{
+        router.push("/movies")
+      }} />
       <Trends onAdd={handleAdd} onSeeMore={() => router.push("/movies")} />
       <Movies genres={genreList} onAdd={handleAdd} onSeeMore={() => router.push("/movies")} />
       <GoldenGlobeBanner />

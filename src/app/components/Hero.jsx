@@ -55,7 +55,7 @@ function StarRow({ rating = 0 }) {
   );
 }
 
-const Hero = () => {
+const Hero = ({onSeeMore}) => {
   const router = useRouter()
   const { data: trending } = useTrending({ mediaType: 'movie', timeWindow: 'week' });
   const features = (trending || []).slice(0, 4);
@@ -120,10 +120,10 @@ const Hero = () => {
       </div>
 
       <div className="hidden md:block">
-        <Navbar />
+        <Navbar onSeeMore={onSeeMore} />
       </div>
       <div className="md:hidden absolute top-0 left-0 right-0 z-20">
-        <Navbar />
+        <Navbar onSeeMore={onSeeMore} />
       </div>
 
       <div className="relative z-10 w-full md:w-[553px] mb-8 md:mb-0 flex flex-col items-start px-4 md:px-0">

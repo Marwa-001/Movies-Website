@@ -16,7 +16,7 @@ const navLinks = [
     { name: 'FAQ', href: '#faqs', sectionId: 'faqs' },
 ];
 
-const Navbar = () => {
+const Navbar = ({onSeeMore}) => {
     const [activeTab, setActiveTab] = useState('Home');
     const [isMenuOpen, setIsMenuOpen] = useState(false); // Mobile menu state
     const theme = useThemeStore((s) => s.theme);
@@ -175,7 +175,7 @@ const Navbar = () => {
                             )}
                         </button>
                         <button aria-label="Search" className="flex items-center justify-center">
-                            <img src={searchIconSrc} alt="Search" className="w-5 h-5 object-contain" />
+                            <img src={searchIconSrc} onClick={onSeeMore} alt="Search" className="w-5 h-5 object-contain" />
                         </button>
                     </div>
 
@@ -212,6 +212,7 @@ const Navbar = () => {
                         <button className="group flex items-center justify-center transition-all duration-300">
                             <img
                                 src={searchIconSrc}
+                                onClick={onSeeMore}
                                 alt="Search"
                                 className="w-5 h-5 object-contain opacity-70 group-hover:opacity-100 transition-opacity"
                             />
