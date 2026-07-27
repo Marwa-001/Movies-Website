@@ -2,6 +2,7 @@
 
 import { Lock } from "lucide-react";
 import { Lato } from "next/font/google";
+import { useThemeStore } from "@/store/useThemeStore";
 
 const lato = Lato({ 
   subsets: ["latin"], 
@@ -12,6 +13,7 @@ const SIDE_ACCENT = "#228EE5";
 const BUTTON_GRADIENT = "linear-gradient(180deg, #0CC2FF 0%, #275EE7 100%)";
 
 const PricingSection = () => {
+  const theme = useThemeStore((s) => s.theme);
   const plans = [
     {
       name: "Basic",
@@ -34,6 +36,12 @@ const PricingSection = () => {
     },
   ];
 
+  // Two dedicated assets per theme now — no more CSS filter hack.
+  const sideCardSrc =
+    theme === "light"
+      ? "/assets/pricing/price-basic-premium-light.svg"
+      : "/assets/pricing/price-basic-premium-dark.svg";
+
   return (
     // Changed to flex-col and added padding-y for mobile spacing
     <div className={`flex flex-col lg:flex-row items-center justify-center gap-10 lg:gap-4 bg-[var(--bg-page)] min-h-screen p-6 lg:p-10 ${lato.className}`}>
@@ -48,7 +56,7 @@ const PricingSection = () => {
           >
             {/* 1. BACKGROUND SVG LAYER - w-full ensures it scales to the container width */}
             <img 
-              src={isSuggested ? "/assets/pricing/price-suggested.svg" : "/assets/pricing/price-basic-premium.svg"} 
+              src={isSuggested ? "/assets/pricing/price-suggested.svg" : sideCardSrc} 
               alt={plan.name}
               className="select-none pointer-events-none w-full h-auto"
             />
@@ -57,7 +65,7 @@ const PricingSection = () => {
             {isSuggested && (
               <img 
                 src="/assets/pricing/line.svg" 
-                className="absolute top-[44%] left-0 w-full z-10 pointer-events-none" 
+                className="absolute top-[44%] left-1/2 -translate-x-1/2 w-[76%] z-10 pointer-events-none" 
                 alt="" 
               />
             )}
