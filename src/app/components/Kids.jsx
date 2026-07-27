@@ -7,8 +7,6 @@ import { Lato } from "next/font/google";
 
 const lato = Lato({ subsets: ["latin"], weight: ["400", "700"] });
 
-// Frame sizes measured in Figma (mobile). Desktop sizes are scaled ~3x to
-// match the same proportion the rest of the section already scales at.
 const kidsContent = [
   {
     id: 1,
@@ -34,18 +32,15 @@ export default function KidsSection() {
   const router = useRouter();
 
   return (
-    <section className={`${lato.className} relative bg-[#228EE5] py-10 md:py-20 px-4 md:px-6 overflow-hidden flex flex-col items-center`}>
-      
+    <section 
+      className={`${lato.className} relative bg-[#228EE5] pt-10 md:pt-20 pb-10 md:pb-16 px-4 md:px-6 overflow-hidden flex flex-col items-center`}
+    >
       {/* Header Text */}
       <div className="text-center mb-8 md:mb-10 max-w-[280px] md:max-w-4xl">
-        <h2
-          className="text-[#EBFAFF] mb-2 md:mb-4 font-bold text-[20px] md:text-[48px] leading-none"
-        >
+        <h2 className="text-[#EBFAFF] mb-2 md:mb-4 font-bold text-[20px] md:text-[48px] leading-none">
           Family-friendly streaming
         </h2>
-        <p
-          className="text-[#EBFAFF] font-medium text-[10px] md:text-[24px] leading-[1.2] md:leading-none tracking-normal"
-        >
+        <p className="text-[#EBFAFF] font-medium text-[10px] md:text-[24px] leading-[1.2] md:leading-none tracking-normal">
           create kids profile, set parental control, and choose rating levels.
           Easily find new favorites by sorting by characters and using age
           filters.
@@ -53,20 +48,21 @@ export default function KidsSection() {
       </div>
 
       {/* Main Content Area */}
-      <div className="relative w-full max-w-6xl">
+      <div className="relative w-full max-w-6xl flex flex-col items-center">
+        
         {/* Posters Row */}
-        <div className="flex flex-row gap-4 md:gap-8 justify-center items-end">
+        <div className="flex flex-row gap-4 md:gap-8 justify-center items-end z-10">
           {kidsContent.map((item) => (
             <KidsCard key={item.id} item={item} />
           ))}
         </div>
 
-        {/* Reflection Row */}
+        {/* Reflection Row - Height limited to cut section size */}
         <div
-          className="flex flex-row gap-4 md:gap-8 justify-center items-start opacity-35 pointer-events-none select-none mt-1"
+          className="flex flex-row gap-4 md:gap-8 justify-center items-start opacity-35 pointer-events-none select-none mt-1 h-[50px] md:h-[220px] overflow-hidden"
           style={{
-            maskImage: "linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 92%)",
-            WebkitMaskImage: "linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 92%)",
+            maskImage: "linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%)",
+            WebkitMaskImage: "linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%)",
           }}
         >
           {kidsContent.map((item) => (
@@ -76,8 +72,8 @@ export default function KidsSection() {
           ))}
         </div>
 
-        {/* Action Button - Exact Figma Mobile Specs vs Desktop */}
-        <div className="absolute bottom-4 md:bottom-10 left-1/2 -translate-x-1/2 z-20">
+        {/* Action Button - Positioned to overlap shadows */}
+        <div className="absolute bottom-2 md:bottom-8 left-1/2 -translate-x-1/2 z-20">
           <button
             type="button"
             onClick={() => router.push("/kids")}
@@ -98,12 +94,6 @@ export default function KidsSection() {
 
 function KidsCard({ item, isReflection = false }) {
   return (
-    // The source art itself is oversized relative to the "frame" — the
-    // character (pig's raised arm, panda's head, Raya's cape/leg) is meant
-    // to spill past the rectangle. So: the frame is a separate bordered box
-    // sized exactly to the Figma-measured dimensions per character, and the
-    // image sits on top of it larger + centered with overflow left visible,
-    // instead of being clipped to a uniform box.
     <div
       className={`group relative transition-transform duration-500 w-[var(--card-mw)] h-[var(--card-mh)] md:w-[var(--card-dw)] md:h-[var(--card-dh)] ${
         !isReflection ? "hover:scale-105 hover:-translate-y-2" : ""
@@ -115,11 +105,6 @@ function KidsCard({ item, isReflection = false }) {
         "--card-dh": `${item.desktop.h}px`,
       }}
     >
-      {/* Oversized image, bled out on the sides and top only (where the
-          ears/head/hair/cape are meant to spill past the frame) — the
-          BOTTOM stays pinned to the frame's own bottom edge so all three
-          cards share the same baseline instead of drifting per-image
-          depending on each source PNG's own aspect ratio. */}
       <div className="absolute left-[-6%] right-[-6%] top-[-8%] bottom-0 overflow-visible pointer-events-none">
         <Image
           src={item.background}
