@@ -44,7 +44,7 @@ export default function LoginPage() {
 
   return (
     <main 
-      className="h-screen w-screen flex overflow-hidden relative"
+      className="min-h-screen w-full flex flex-col overflow-x-hidden relative"
       style={{
         backgroundColor: "#030A1B",
         backgroundImage: `
@@ -53,41 +53,41 @@ export default function LoginPage() {
         `
       }}
     >
-      {/* Back Arrow - Absolute positioned to the top-left of the viewport */}
+      {/* Back Arrow - Adjusted position for mobile */}
       <Link 
         href="/" 
-        className="absolute left-10 top-10 z-40 text-white/40 hover:text-white transition-colors"
+        className="absolute left-6 top-6 md:left-10 md:top-10 z-40 text-white/40 hover:text-white transition-colors"
       >
-        <ArrowLeft className="h-7 w-7" />
+        <ArrowLeft className="h-6 w-6 md:h-7 md:w-7" />
       </Link>
 
       {step === "form" ? (
-        <div className="flex w-full h-full mt-5">
-          {/* LEFT SIDE: Content Column (Approx 40% of 1440px) */}
-          <div className="flex flex-col justify-center shrink-0 z-20 pl-[100px] lg:pl-[120px]">
-            {/* The 302px Width Content Block */}
-            <div style={{ width: "302px" }}>
-              <h1 className="text-[72px] font-[700] text-white mb-8 tracking-tight leading-none">
+        <div className="flex flex-col lg:flex-row w-full flex-1 mt-16 lg:mt-5">
+          {/* LEFT SIDE: Content Column */}
+          <div className="flex flex-col justify-center items-center lg:items-start shrink-0 z-20 px-6 lg:pl-[100px] xl:pl-[120px] w-full lg:w-auto">
+            {/* Wrapper to maintain the 302px width on desktop */}
+            <div className="w-full max-w-[302px]">
+              <h1 className="text-[48px] md:text-[72px] font-[700] text-white mb-6 md:mb-8 tracking-tight leading-none text-center lg:text-left">
                 Welcome
               </h1>
 
-              {/* Tabs with exact 24px font size */}
-              <div className="flex items-center gap-10 mb-14">
+              {/* Tabs */}
+              <div className="flex items-center justify-center lg:justify-start gap-8 md:gap-10 mb-10 md:mb-14">
                 <div className="relative">
-                  <span className="text-[24px] font-[700] text-white tracking-[2px] cursor-default">
+                  <span className="text-[20px] md:text-[24px] font-[700] text-white tracking-[2px] cursor-default">
                     LOGIN
                   </span>
                   <div className="absolute -bottom-[4px] left-0 right-0 h-[2.5px] bg-[#228EE5] rounded-full shadow-[0_0_15px_rgba(34,142,229,1)]" />
                 </div>
                 <Link 
                   href="/signup" 
-                  className="text-[24px] font-[700] text-gray-500 hover:text-gray-300 tracking-[2px] transition-colors"
+                  className="text-[20px] md:text-[24px] font-[700] text-gray-500 hover:text-gray-300 tracking-[2px] transition-colors"
                 >
                   SIGNUP
                 </Link>
               </div>
 
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <form onSubmit={handleSubmit} className="space-y-5 md:space-y-6">
                 <div className="relative group">
                   <input
                     type="email"
@@ -95,9 +95,9 @@ export default function LoginPage() {
                     value={form.email}
                     onChange={handleChange}
                     placeholder="Email"
-                    className="w-full bg-[#131927]/60 border border-white/10 rounded-xl px-5 py-4 text-[15px] text-white placeholder:text-gray-500 focus:outline-none focus:border-[#228EE5]/50 transition-all"
+                    className="w-full bg-[#131927]/60 border border-white/10 rounded-xl px-5 py-3.5 md:py-4 text-[14px] md:text-[15px] text-white placeholder:text-gray-500 focus:outline-none focus:border-[#228EE5]/50 transition-all"
                   />
-                  <User className="absolute right-5 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-500" />
+                  <User className="absolute right-5 top-1/2 -translate-y-1/2 h-4 w-4 md:h-5 md:w-5 text-gray-500" />
                 </div>
 
                 <div className="relative group">
@@ -107,30 +107,30 @@ export default function LoginPage() {
                     value={form.password}
                     onChange={handleChange}
                     placeholder="Password"
-                    className="w-full bg-[#131927]/60 border border-white/10 rounded-xl px-5 py-4 text-[15px] text-white placeholder:text-gray-500 focus:outline-none focus:border-[#228EE5]/50 transition-all"
+                    className="w-full bg-[#131927]/60 border border-white/10 rounded-xl px-5 py-3.5 md:py-4 text-[14px] md:text-[15px] text-white placeholder:text-gray-500 focus:outline-none focus:border-[#228EE5]/50 transition-all"
                   />
                   <button 
                     type="button" 
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute right-5 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300"
                   >
-                    {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                    {showPassword ? <EyeOff className="h-4 w-4 md:h-5 md:w-5" /> : <Eye className="h-4 w-4 md:h-5 md:w-5" />}
                   </button>
                 </div>
 
                 <div className="text-center pt-2">
-                  <button type="button" className="text-[12px] text-gray-500 hover:text-gray-300 transition-colors uppercase font-bold tracking-widest">
+                  <button type="button" className="text-[10px] md:text-[12px] text-gray-500 hover:text-gray-300 transition-colors uppercase font-bold tracking-widest">
                     Forgot Password?
                   </button>
                 </div>
 
                 {errors.form && <p className="text-center text-xs text-rose-500">{errors.form}</p>}
 
-                <div className="pt-8 flex justify-center">
+                <div className="pt-6 md:pt-8 flex justify-center">
                   <button
                     type="submit"
                     disabled={login.isPending}
-                    className="bg-[#228EE5] hover:bg-blue-500 text-white text-[15px] font-bold px-16 py-3.5 rounded-xl shadow-[0_10px_30px_rgba(34,142,229,0.3)] active:scale-95 transition-all"
+                    className="w-full md:w-auto bg-[#228EE5] hover:bg-blue-500 text-white text-[14px] md:text-[15px] font-bold px-12 md:px-16 py-3.5 rounded-xl shadow-[0_10px_30px_rgba(34,142,229,0.3)] active:scale-95 transition-all"
                   >
                     {login.isPending ? "LOGIN..." : "LOGIN"}
                   </button>
@@ -139,11 +139,11 @@ export default function LoginPage() {
             </div>
           </div>
 
-          {/* RIGHT SIDE: Cinematic Image (Remaining 60%) */}
-          <div className="flex-1 relative flex items-center justify-center p-[60px]">
+          {/* RIGHT SIDE: Cinematic Image - Hidden on mobile, exactly the same on desktop */}
+          <div className="hidden lg:flex flex-1 relative items-center justify-center p-[40px] xl:p-[60px]">
             <div 
               className="relative w-full max-w-[850px] overflow-hidden rounded-[24px] shadow-2xl"
-              style={{ height: "528px" }} // Centered vertically as per height requirement
+              style={{ height: "528px" }}
             >
               <Image 
                 src="/assets/auth.png" 
@@ -152,7 +152,6 @@ export default function LoginPage() {
                 className="object-cover"
                 priority 
               />
-              {/* Subtle overlay to blend into background gradient */}
               <div 
                 className="absolute inset-y-0 left-0 w-32 z-10" 
                 style={{
@@ -163,37 +162,28 @@ export default function LoginPage() {
           </div>
         </div>
       ) : (
-       /* SUCCESS STATE */
-<div className="w-full h-full flex flex-col items-center justify-center text-center animate-in fade-in duration-700">
-   <div className="relative mb-10">
-      <div className="w-40 h-40 rounded-full bg-[#228EE5] flex items-center justify-center shadow-[0_0_60px_rgba(34,142,229,0.5)]">
-         
-         {/* Updated Container */}
-         <div className="relative w-[148px] h-[148px] rounded-full bg-[#030A1B] flex items-center justify-center overflow-hidden">
-            {user?.avatarUrl ? (
-               <Image 
-                  src={user.avatarUrl} 
-                  alt="User Avatar" 
-                  fill 
-                  className="object-cover" 
-               />
-            ) : (
-               <User className="w-16 h-16 text-[#228EE5]" />
-            )}
-         </div>
-         
-      </div>
-   </div>
-   
-   <p className="text-[14px] font-bold text-gray-400 tracking-[3px] uppercase mb-12">
-      {/* Show username if available, else show email prefix */}
-      {user?.username || form.email.split('@')[0]}
-   </p>
-   
-   <h2 className="text-4xl font-medium text-white tracking-wide">
-      You have successfully logged in
-   </h2>
-</div>
+        /* SUCCESS STATE */
+        <div className="w-full flex-1 flex flex-col items-center justify-center text-center p-6 animate-in fade-in duration-700">
+           <div className="relative mb-8 md:mb-10">
+              <div className="w-32 h-32 md:w-40 md:h-40 rounded-full bg-[#228EE5] flex items-center justify-center shadow-[0_0_60px_rgba(34,142,229,0.5)]">
+                 <div className="relative w-[118px] h-[118px] md:w-[148px] md:h-[148px] rounded-full bg-[#030A1B] flex items-center justify-center overflow-hidden">
+                    {user?.avatarUrl ? (
+                       <Image src={user.avatarUrl} alt="User Avatar" fill className="object-cover" />
+                    ) : (
+                       <User className="w-12 h-12 md:w-16 md:h-16 text-[#228EE5]" />
+                    )}
+                 </div>
+              </div>
+           </div>
+           
+           <p className="text-[12px] md:text-[14px] font-bold text-gray-400 tracking-[3px] uppercase mb-8 md:mb-12">
+              {user?.username || form.email.split('@')[0]}
+           </p>
+           
+           <h2 className="text-2xl md:text-4xl font-medium text-white tracking-wide max-w-sm md:max-w-none">
+              You have successfully logged in
+           </h2>
+        </div>
       )}
     </main>
   );

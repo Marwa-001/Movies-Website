@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from './Navbar';
 import { useTrending } from '@/hooks/useTrending';
+import { useRouter } from 'next/navigation';
 
 const FALLBACK = {
   title: 'The Witcher',
@@ -55,11 +56,22 @@ function StarRow({ rating = 0 }) {
 }
 
 const Hero = () => {
+  const router = useRouter()
   const { data: trending } = useTrending({ mediaType: 'movie', timeWindow: 'week' });
   const features = (trending || []).slice(0, 4);
   const hasData = features.length >= 4;
 
   const [current, setCurrent] = useState(1);
+
+   const handleWatchNow = () => {
+    if (!active?.id) return; 
+    const params = new URLSearchParams({
+      title: active.title || "",
+      poster: active.imageSrc || "",
+      backdrop: active.backdropSrc || "",
+    });
+    router.push(`/watch/movie/${active.id}?${params.toString()}`);
+  };
 
   useEffect(() => {
     if (!hasData) return;
@@ -160,11 +172,14 @@ const Hero = () => {
         </div>
 
         {/* Action Row */}
-        <div className="flex items-center gap-3 pb-8 md:pb-0">
-          <button className="bg-[#228EE5] hover:bg-blue-600 rounded-full font-bold md:font-[500] text-[14px] md:text-[16px] transition-all flex items-center justify-center gap-2 w-[128px] h-[32px] md:w-[168px] md:h-[40px]">
-            <img src='/assets/play.png' className='w-3 h-3 md:w-[16px] md:h-[16px]' alt="" /> 
-            <span className="whitespace-nowrap">Watch Movie</span>
-          </button>
+        {/* Action Row */}
+<div className="flex items-center gap-3 pb-8 md:pb-0">
+  <button
+    onClick={handleWatchNow}   // ADD THIS
+    className="bg-[#228EE5] hover:bg-blue-600 rounded-full font-bold md:font-[500] text-[14px] md:text-[16px] transition-all flex items-center justify-center gap-2 w-[128px] h-[32px] md:w-[168px] md:h-[40px]">
+    <img src='/assets/play.png' className='w-3 h-3 md:w-[16px] md:h-[16px]' alt="" /> 
+    <span className="whitespace-nowrap">Watch Movie</span>
+  </button>
           <button className="border border-[var(--border-subtle)] text-[var(--text-primary)] hover:bg-[var(--bg-surface)] rounded-full font-bold md:font-[500] text-[14px] md:text-[16px] transition-all flex items-center justify-center gap-2 w-[128px] h-[32px] md:w-[128px] md:h-[40px]">
             <span className="whitespace-nowrap">More Info</span> <span>→</span>
           </button>

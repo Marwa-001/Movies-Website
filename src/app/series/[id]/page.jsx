@@ -96,7 +96,6 @@ export default function SeriesDetailPage() {
 
   return (
     <>
-      {/* ============ HERO ============ */}
       <section className="relative pt-28 md:pt-40 pb-24 md:pb-8 px-6 md:px-12 bg-[var(--bg-page)] text-[var(--text-primary)]">
         <div
           className="absolute inset-0 z-0 bg-cover bg-center"
@@ -110,7 +109,6 @@ export default function SeriesDetailPage() {
 
         <div className="relative z-10 mt-32 flex flex-col md:flex-row md:items-end md:justify-between gap-6">
           <div className="max-w-2xl">
-            {/* Title — Lato 700 / 72px / 100% line-height / 0 tracking */}
             <h1
               className="text-[40px] md:text-[72px] font-bold theme-text-primary mb-3 leading-none tracking-normal drop-shadow-2xl"
             >
@@ -180,7 +178,6 @@ export default function SeriesDetailPage() {
             </div>
           </div>
 
-          {/* Action buttons — Updated spacing */}
           <div className="flex items-center gap-3 mb-10 md:mb-20 shrink-0">
             <button
               onClick={goToWatch}
@@ -210,7 +207,6 @@ export default function SeriesDetailPage() {
         </div>
       </section>
 
-      {/* ============ GALLERY — 240x240 cards, 15px radius ============ */}
       {series.gallery.length > 0 && (
         <div className="px-6 md:px-12 -mt-8 relative z-10">
           <div className="no-scrollbar flex gap-4 overflow-x-auto pb-2">
@@ -234,7 +230,7 @@ export default function SeriesDetailPage() {
       )}
 
       <div className="px-6 md:px-12 py-10 md:py-16 space-y-10 md:space-y-16">
-        {/* About — heading 72px/700, paragraph 24px/500 */}
+        {/* About */}
         {series.overview && (
           <section>
             <h3 className="text-2xl md:text-[72px] font-bold theme-text-primary mb-4 leading-tight md:leading-none tracking-normal">
@@ -282,7 +278,6 @@ export default function SeriesDetailPage() {
           </section>
         )}
 
-        {/* Creator (mirrors Director on the movie detail page) */}
         {series.creator && (
           <section>
             <h3 className={sectionHeadingClass}>Creator</h3>
@@ -303,7 +298,6 @@ export default function SeriesDetailPage() {
           </section>
         )}
 
-        {/* Comments — 238x120 cards, horizontally scrollable, theme-aware border */}
         <section>
           <div className="flex items-center justify-between mb-4 md:mb-6">
             <h3 className={sectionHeadingClass + " mb-0"}>Comments</h3>
@@ -319,12 +313,18 @@ export default function SeriesDetailPage() {
                 className="relative w-[160px] h-[86px] md:w-[238px] md:h-[120px] shrink-0 rounded-lg bg-[var(--bg-page)] p-3 md:p-4 flex flex-col border"
               >
                 <div className="flex items-center gap-2 md:gap-3">
-                  <div className="w-6 h-6 md:w-9 md:h-9 rounded-full overflow-hidden border border-[var(--border-subtle)] shrink-0">
-                    <img
-                      src={null}
-                      alt="avatar"
-                      className="w-full h-full object-cover bg-[var(--bg-surface-strong)]"
-                    />
+                  <div className="w-6 h-6 md:w-9 md:h-9 rounded-full overflow-hidden border border-[var(--border-subtle)] shrink-0 flex items-center justify-center bg-[var(--bg-surface-strong)]">
+                    {c.avatarUrl ? (
+                      <img
+                        src={c.avatarUrl}
+                        alt={c.name}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <span className="text-[10px] md:text-xs font-bold theme-text-secondary">
+                        {c.name[0].toUpperCase()}
+                      </span>
+                    )}
                   </div>
                   <span className="text-[11px] md:text-[14px] font-medium theme-text-secondary truncate">
                     {c.name}
@@ -336,14 +336,11 @@ export default function SeriesDetailPage() {
                   that was perfect
                 </p>
 
-                {/* Bottom Reactions Section */}
                 <div className="absolute bottom-2 right-3 md:bottom-3 md:right-4 flex items-center gap-2 md:gap-3 theme-text-secondary">
-                  {/* Thumbs Down */}
                   <div className="flex items-center gap-1 cursor-pointer hover:opacity-80">
                     <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17" /></svg>
                     <span className="text-[9px] md:text-[10px]">0</span>
                   </div>
-                  {/* Thumbs Up */}
                   <div className="flex items-center gap-1 cursor-pointer hover:opacity-80">
                     <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3" /></svg>
                     <span className="text-[9px] md:text-[10px] font-bold">+1</span>
