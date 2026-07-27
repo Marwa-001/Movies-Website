@@ -1,18 +1,23 @@
 "use client";
 import { useState } from "react";
 import Image from "next/image";
-
-const castData = [
-  { id: 1, name: "Jason Momoa", img: "/assets/cast1.jpg" },
-  { id: 2, name: "Dwayne Johnson", img: "/assets/cast2.jpg" },
-  { id: 3, name: "Emma Watson", img: "/assets/cast3.jpg" },
-  { id: 4, name: "Tom Holland", img: "/assets/cast4.jpg" },
-  { id: 5, name: "Ana de Armas", img: "/assets/cast5.jpg" },
-  { id: 6, name: "Keanu Reeves", img: "/assets/cast6.jpg" },
-];
+import { usePopularActors } from "@/hooks/usePopularActors";
+import { usePopularDirectors } from "@/hooks/usePopularDirectors";
 
 export function Cast() {
   const [role, setRole] = useState("Actors"); // 'Directors' or 'Actors'
+  const { data: actors, isLoading: loadingActors } = usePopularActors({ page: 1 });
+  const { data: directors, isLoading: loadingDirectors } = usePopularDirectors({ page: 1 });
+
+  const isLoading = role === "Actors" ? loadingActors : loadingDirectors;
+  const source = role === "Actors" ? actors : directors;
+
+  const castData = (source || []).slice(0, 6).map((p) => ({
+    id: p.id,
+    name: p.name,
+    img: p.imageSrc,
+  }));
+
 
   return (
     <section className="py-8 px-12 lg:px-24 bg-[var(--bg-page)]">
@@ -42,22 +47,28 @@ export function Cast() {
       </div>
 
       <div className="flex items-center gap-8 overflow-x-auto no-scrollbar pb-4">
-        {castData.map((person) => (
-          <div key={person.id} className="flex-shrink-0 group cursor-pointer">
-            <div className="relative w-28 h-28 rounded-full overflow-hidden border-2 border-transparent group-hover:border-[#228EE5] transition-all shadow-xl">
-              <Image 
-                src={person.img || null} 
-                alt={person.name} 
-                fill 
-                className="object-cover"
-              />
-            </div>
-            {/* Optional Name on hover */}
-            <p className="text-center text-gray-400 text-xs mt-3 opacity-0 group-hover:opacity-100 transition-opacity">
-              {person.name}
-            </p>
-          </div>
-        ))}
+        {isLoading
+          ? Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className="flex-shrink-0">
+                <div className="w-28 h-28 rounded-full bg-white/5 animate-pulse" />
+              </div>
+            ))
+          : castData.map((person) => (
+              <div key={person.id} className="flex-shrink-0 group cursor-pointer">
+                <div className="relative w-28 h-28 rounded-full overflow-hidden border-2 border-transparent group-hover:border-[#228EE5] transition-all shadow-xl">
+                  <Image
+                    src={person.img || "/assets/cast1.jpg"}
+                    alt={person.name}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+                {/* Optional Name on hover */}
+                <p className="text-center text-gray-400 text-xs mt-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                  {person.name}
+                </p>
+              </div>
+            ))}
       </div>
     </section>
   );

@@ -9,11 +9,11 @@ import { usePathname } from 'next/navigation';
 
 const navLinks = [
     { name: 'Home', href: '/', sectionId: null }, // no section — top of page
-    { name: 'Pricing', href: '#pricing', sectionId: 'pricing' },
+    { name: 'Pricing', href: '/#pricing', sectionId: 'pricing' },
     { name: 'Movies', href: '/#movies', sectionId: 'movies' },
     { name: 'Series', href: '/#series', sectionId: 'series' },
     { name: 'Collection', href: '/#collections', sectionId: 'collections' },
-    { name: 'FAQ', href: '#faqs', sectionId: 'faqs' },
+    { name: 'FAQ', href: '/#faqs', sectionId: 'faqs' },
 ];
 
 const Navbar = ({onSeeMore}) => {

@@ -48,31 +48,31 @@ export default function KidsSection() {
       </div>
 
       {/* Main Content Area */}
-      <div className="relative w-full max-w-6xl flex flex-col items-center">
+      <div className="relative w-full max-w-6xl flex flex-row gap-4 md:gap-8 justify-center items-end">
         
-        {/* Posters Row */}
-        <div className="flex flex-row gap-4 md:gap-8 justify-center items-end z-10">
-          {kidsContent.map((item) => (
-            <KidsCard key={item.id} item={item} />
-          ))}
-        </div>
-
-        {/* Reflection Row - Height limited to cut section size */}
-        <div
-          className="flex flex-row gap-4 md:gap-8 justify-center items-start opacity-35 pointer-events-none select-none mt-1 h-[50px] md:h-[220px] overflow-hidden"
-          style={{
-            maskImage: "linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%)",
-            WebkitMaskImage: "linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%)",
-          }}
-        >
-          {kidsContent.map((item) => (
-            <div key={`ref-${item.id}`} className="scale-y-[-1]">
-              <KidsCard item={item} isReflection />
+        {kidsContent.map((item) => (
+          <div key={item.id} className="group flex flex-col items-center">
+            {/* Poster - Added group-hover logic here */}
+            <div className="z-10 transition-transform duration-500 group-hover:scale-105 group-hover:-translate-y-2">
+              <KidsCard item={item} />
             </div>
-          ))}
-        </div>
 
-        {/* Action Button - Positioned to overlap shadows */}
+            {/* Reflection Row - Synced with the poster via group-hover */}
+            <div
+              className="opacity-35 pointer-events-none select-none mt-1 h-[50px] md:h-[220px] overflow-hidden transition-transform duration-500 group-hover:scale-105"
+              style={{
+                maskImage: "linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%)",
+                WebkitMaskImage: "linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%)",
+              }}
+            >
+              <div className="scale-y-[-1]">
+                <KidsCard item={item} />
+              </div>
+            </div>
+          </div>
+        ))}
+
+        {/* Action Button - Remains absolute to avoid shifting UI */}
         <div className="absolute bottom-2 md:bottom-8 left-1/2 -translate-x-1/2 z-20">
           <button
             type="button"
@@ -92,12 +92,10 @@ export default function KidsSection() {
   );
 }
 
-function KidsCard({ item, isReflection = false }) {
+function KidsCard({ item }) {
   return (
     <div
-      className={`group relative transition-transform duration-500 w-[var(--card-mw)] h-[var(--card-mh)] md:w-[var(--card-dw)] md:h-[var(--card-dh)] ${
-        !isReflection ? "hover:scale-105 hover:-translate-y-2" : ""
-      }`}
+      className="relative w-[var(--card-mw)] h-[var(--card-mh)] md:w-[var(--card-dw)] md:h-[var(--card-dh)]"
       style={{
         "--card-mw": `${item.mobile.w}px`,
         "--card-mh": `${item.mobile.h}px`,

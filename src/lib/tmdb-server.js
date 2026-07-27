@@ -102,6 +102,32 @@ export async function getPopularActors({ page = 1 } = {}) {
   }));
 }
 
+export async function getPopularDirectors({ page = 1 } = {}) {
+  const data = await tmdbFetch("/movie/popular", { page });
+  const movies = (data.results || []).slice(0, 12);
+
+  const credits = await Promise.all(
+    movies.map((m) =>
+      tmdbFetch(`/movie/${m.id}/credits`).catch(() => null)
+    )
+  );
+
+  const seen = new Map();
+  credits.forEach((c) => {
+    if (!c) return;
+    const director = (c.crew || []).find((p) => p.job === "Director");
+    if (director && !seen.has(director.id)) {
+      seen.set(director.id, {
+        id: String(director.id),
+        name: director.name,
+        imageSrc: getTmdbImageUrl(director.profile_path),
+      });
+    }
+  });
+
+  return Array.from(seen.values());
+}
+
 /**
  * Full detail payload for the movie detail page: banner, gallery, cast,
  * director, genres, and a "Suggestion like ..." row (TMDB recommendations).
