@@ -74,7 +74,7 @@ export default function Collections() {
                   <StackedCollectionCard title={col.title} images={col.images} imageSrc={col.imageSrc} size="mobile" />
                 </div>
                 {/* Desktop-sized stack */}
-                <div className="hidden md:block">
+                <div className="hidden md:block pt-4">
                   <StackedCollectionCard title={col.title} images={col.images} imageSrc={col.imageSrc} />
                 </div>
               </Link>
