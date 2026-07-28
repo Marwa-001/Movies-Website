@@ -44,7 +44,7 @@ const PricingSection = () => {
 
   return (
     // Changed to flex-col and added padding-y for mobile spacing
-    <div className={`flex flex-row items-center justify-center gap-2 sm:gap-4 lg:gap-4 bg-[var(--bg-page)] py-3 lg:min-h-screen lg:py-10 px-3 sm:p-6 ${lato.className}`}>
+    <div id="pricing" className={`flex flex-row items-center justify-center gap-2 sm:gap-4 lg:gap-4 bg-[var(--bg-page)] py-3 lg:min-h-screen lg:py-10 px-3 sm:p-6 ${lato.className}`}>
       {plans.map((plan, index) => {
         const isSuggested = plan.type === "suggested";
 
