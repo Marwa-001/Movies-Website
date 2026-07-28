@@ -39,7 +39,7 @@ export default async function CollectionsPage() {
 </div>
 
 {/* 3a. MOBILE: simple 2-col grid, no stacked layers */}
-<div className="grid grid-cols-2 gap-4 md:hidden mb-4">
+{/* <div className="grid grid-cols-2 gap-4 md:hidden mb-4">
   {data.map((cat, idx) => (
     <Link href={`/collections/${slugifyTheme(cat.title)}`} key={idx} className="block">
       <div className="relative w-full aspect-[2/3] rounded-[14px] overflow-hidden border border-white/10 shadow-lg">
@@ -56,10 +56,10 @@ export default async function CollectionsPage() {
       </div>
     </Link>
   ))}
-</div>
+</div> */}
 
 {/* 3b. DESKTOP: permanently stacked 3-layer grid */}
-<div className="hidden md:grid grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-y-20 gap-x-20 justify-items-center">
+{/* <div className="hidden md:grid grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-y-20 gap-x-20 justify-items-center">
   {data.map((cat, idx) => (
     <Link href={`/collections/${slugifyTheme(cat.title)}`} key={idx} className="block group">
       <div className="relative w-[236px] h-[324px] transition-transform duration-300 group-hover:-translate-y-2">
@@ -80,7 +80,7 @@ export default async function CollectionsPage() {
       </div>
     </Link>
   ))}
-</div>
+</div> */}
         </div>
       </main>
       <Footer />
