@@ -95,38 +95,28 @@ export default function AdvanceSearchBar({
         </div>
       </div>
 
-      {/* DESKTOP: pixel-perfect skewed arch tab — untouched */}
-      <div className="hidden md:block absolute -top-[58px] left-[142px] z-0">
-        <div
-          style={{
-            width: '243.87px',
-            height: '109.84px',
-            backgroundColor: '#228EE5',
-            borderRadius: '110px 90px 15px 15px / 60px 45px 5px 5px',
-            transform: 'skewX(-12deg)',
-            display: 'flex',
-            justifyContent: 'center',
-            paddingTop: '20px',
-            boxShadow: '0 -10px 40px rgba(34, 142, 229, 0.25)'
-          }}
-        >
-          <span
-            style={{ transform: 'skewX(12deg)' }}
-            className="text-white font-bold text-[19px] tracking-tight antialiased"
-          >
-            Advance Search
-          </span>
-        </div>
-      </div>
+      {/* DESKTOP: arch tab (SVG shape) with text overlay */}
+<div className="hidden md:block absolute -top-[58px] left-[142px] z-10">
+  <div className="relative" style={{ width: '243.87px', height: '109.84px' }}>
+    <img
+      src="/assets/advance-search.svg"
+      alt=""
+      className="absolute inset-0 w-full h-full object-fill drop-shadow-[0_-10px_40px_rgba(34,142,229,0.25)]"
+    />
+    <span className="absolute inset-x-0 top-[26px] text-center text-white font-bold text-[19px] tracking-tight antialiased">
+      Advance Search
+    </span>
+  </div>
+</div>
 
-      {/* DESKTOP: mascot, positioned outside normal flow — untouched */}
-      <div className="hidden md:block absolute -top-[-30px] left-[30px] z-30 pointer-events-none">
-        <img
-          src="/assets/searchlogo 1.png"
-          alt="Camera Mascot"
-          className="w-[215px] h-auto object-contain drop-shadow-[0_20px_35px_rgba(0,0,0,0.6)]"
-        />
-      </div>
+{/* DESKTOP: mascot, positioned outside normal flow */}
+<div className="hidden md:block absolute -top-[-30px] left-[30px] z-10 pointer-events-none">
+  <img
+    src="/assets/searchlogo 1.png"
+    alt="Camera Mascot"
+    className="w-[215px] h-auto object-contain drop-shadow-[0_20px_35px_rgba(0,0,0,0.6)]"
+  />
+</div>
 
       {/* MAIN CONTAINER CARD */}
       <div className="relative z-20 rounded-[24px] md:rounded-[32px] border border-[var(--border-subtle)] bg-[var(--bg-page)] p-6 md:p-10 shadow-2xl overflow-hidden">

@@ -128,7 +128,7 @@ const Navbar = ({onSeeMore}) => {
     const themeToggleIconSrc = theme === 'dark' ? '/assets/sun.png' : '/assets/moon.png';
 
     return (
-        <nav className="navbar-container fixed top-6 left-1/2 -translate-x-1/2 w-[95%] max-w-6xl z-50">
+        <nav className="navbar-container fixed top-6 left-1/2 -translate-x-1/2 w-[95%] max-w-6xl z-[100] isolate">
             <div className="relative rounded-[16px] shadow-2xl">
                 {/* Decorative background layer */}
                 <div

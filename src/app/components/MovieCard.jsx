@@ -77,7 +77,22 @@ const innerR = isMobile ? 6 : 12;
       </svg>
 
       <div className="absolute inset-0 w-full h-full overflow-hidden" style={{ clipPath: `url(#${maskId})` }}>
-        <Image src={imageSrc || null} alt={title} fill priority={priority}  sizes="(max-width: 768px) 112px, 208px"  className="object-cover transition-transform duration-500 ease-out group-hover:scale-105" />
+        {imageSrc ? (
+  <Image
+    src={imageSrc}
+    alt={title}
+    fill
+    priority={priority}
+    sizes="(max-width: 768px) 112px, 208px"
+    className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+  />
+) : (
+  <div className="w-full h-full flex items-center justify-center bg-[var(--bg-surface-strong)] text-center px-2">
+    <span className="text-[10px] md:text-xs text-[var(--text-secondary)] font-medium line-clamp-3">
+      {title}
+    </span>
+  </div>
+)}
       </div>
       
       <button
